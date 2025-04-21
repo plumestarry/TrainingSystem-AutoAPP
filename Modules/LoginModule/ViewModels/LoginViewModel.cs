@@ -14,6 +14,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using AutoAPP.Core.Extensions;
 using System.Reflection;
+using System.CodeDom;
+using System.Security.Principal;
+using System.Text.RegularExpressions;
 
 namespace LoginModule.ViewModels
 {
@@ -82,14 +85,20 @@ namespace LoginModule.ViewModels
                 case "Register": Register(); break;
                 case "RegisterPage": SelectIndex = 1; break;
                 case "Return": SelectIndex = 0; break;
+                case "Guest": GuestLogin(); break;
             }
         }
 
         async void Login()
         {
-            if (string.IsNullOrWhiteSpace(Account) ||
-                string.IsNullOrWhiteSpace(PassWord))
+            if (string.IsNullOrWhiteSpace(Account) || string.IsNullOrWhiteSpace(PassWord))
             {
+                return;
+            }
+
+            if (Account == "Guest" && PassWord == "Guest" && AppSession.UserName == "Guest")
+            {
+                RequestClose.Invoke(ButtonResult.OK);
                 return;
             }
 
@@ -108,7 +117,7 @@ namespace LoginModule.ViewModels
             }
             else
             {
-                //登录失败提示...
+                // 登录失败提示...
                 aggregator.SendMessage(loginResult?.Message ?? string.Empty, "Login");
             }
         }
@@ -130,6 +139,15 @@ namespace LoginModule.ViewModels
                 return;
             }
 
+            // 检查用户名是否为中文，检查账号和密码是否为字母或数字
+            if (!Regex.IsMatch(UserDto.Account, @"^[a-zA-Z0-9]+$") ||
+                !Regex.IsMatch(UserDto.PassWord, @"^[a-zA-Z0-9]+$") ||
+                !Regex.IsMatch(UserDto.UserName, @"^[\u4e00-\u9fa5]+$"))
+            {
+                aggregator.SendMessage("用户名必须为中文, 账号和密码必须为字母或数字！", "Login");
+                return;
+            }
+
             var registerResult = await loginService.Register(new UserDto()
             {
                 Account = UserDto.Account,
@@ -140,7 +158,7 @@ namespace LoginModule.ViewModels
             if (registerResult != null && registerResult.Status)
             {
                 aggregator.SendMessage("注册成功", "Login");
-                //注册成功,返回登录页页面
+                // 注册成功,返回登录页页面
                 SelectIndex = 0;
             }
             else
@@ -150,6 +168,20 @@ namespace LoginModule.ViewModels
         void LoginOut()
         {
             RequestClose.Invoke(ButtonResult.No);
+        }
+
+        void GuestLogin()
+        {
+            try
+            {
+                AppSession.UserName = "Guest";
+                Account = "Guest";
+                PassWord = "Guest";
+            }
+            catch (Exception)
+            {
+                aggregator.SendMessage("登录失败", "Login");
+            }
         }
 
         #endregion ************************************************** Login **************************************************

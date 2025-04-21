@@ -57,36 +57,53 @@
                         Text="欢迎使用" />
 
                     <TextBox
-                        Margin="0,10"
+                        Margin="0,5"
                         md:HintAssist.Hint="请输入账号"
                         DockPanel.Dock="Top"
+                        FontSize="12"
                         Text="{Binding Account}" />
 
                     <PasswordBox
-                        Margin="0,10"
+                        Margin="0,5"
                         md:HintAssist.Hint="请输入密码"
                         pass:PassWordExtensions.PassWord="{Binding PassWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        DockPanel.Dock="Top">
+                        DockPanel.Dock="Top"
+                        FontSize="12">
                         <i:Interaction.Behaviors>
                             <pass:PasswordBehavior />
                         </i:Interaction.Behaviors>
                     </PasswordBox>
 
                     <Button
+                        Margin="0,10"
                         Command="{Binding ExecuteCommand}"
                         CommandParameter="Login"
                         Content="登录系统"
-                        DockPanel.Dock="Top" />
+                        DockPanel.Dock="Top"
+                        FontSize="16" />
 
                     <DockPanel Margin="0,5" LastChildFill="False">
-                        <TextBlock Text="注册账号">
+                        <TextBlock
+                            FontSize="12"
+                            Style="{StaticResource HoverableTextBlockStyle}"
+                            Text="注册账号">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                     <i:InvokeCommandAction Command="{Binding ExecuteCommand}" CommandParameter="RegisterPage" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TextBlock>
-                        <TextBlock DockPanel.Dock="Right" Text="游客登录" />
+                        <TextBlock
+                            DockPanel.Dock="Right"
+                            FontSize="12"
+                            Style="{StaticResource HoverableTextBlockStyle}"
+                            Text="游客登录">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding ExecuteCommand}" CommandParameter="Guest" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBlock>
                     </DockPanel>
 
                 </DockPanel>
@@ -105,12 +122,13 @@
                         Margin="0,5"
                         md:HintAssist.Hint="请输入用户名"
                         DockPanel.Dock="Top"
-                        Text="{Binding UserDto.Account}" />
+                        Text="{Binding UserDto.UserName}" />
+
                     <TextBox
                         Margin="0,5"
                         md:HintAssist.Hint="请输入账号"
                         DockPanel.Dock="Top"
-                        Text="{Binding UserDto.UserName}" />
+                        Text="{Binding UserDto.Account}" />
 
                     <PasswordBox
                         Margin="0,5"
@@ -133,13 +151,14 @@
                     </PasswordBox>
 
                     <Button
+                        Margin="0,10"
                         Command="{Binding ExecuteCommand}"
                         CommandParameter="Register"
                         Content="注册账号"
                         DockPanel.Dock="Top" />
 
                     <Button
-                        Margin="0,10"
+                        Margin="0,5"
                         Command="{Binding ExecuteCommand}"
                         CommandParameter="Return"
                         Content="返回登录"
