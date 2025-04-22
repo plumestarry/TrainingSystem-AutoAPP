@@ -93,6 +93,7 @@ namespace LoginModule.ViewModels
         {
             if (string.IsNullOrWhiteSpace(Account) || string.IsNullOrWhiteSpace(PassWord))
             {
+                aggregator.SendMessage("请输入完整的登录信息！", "Login");
                 return;
             }
 

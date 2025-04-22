@@ -11,11 +11,6 @@ namespace AutoAPP.Core.Extensions
         /// <summary>
         /// 首页区域导航名称
         /// </summary>
-        public static readonly string MainViewRegionName = "MainViewRegion";
-
-        /// <summary>
-        /// 设置区域导航名称
-        /// </summary>
-        public static readonly string SettingsViewRegionName = "SettingsViewRegion";
+        public const string MainViewRegionName = "MainViewRegion";
     }
 }

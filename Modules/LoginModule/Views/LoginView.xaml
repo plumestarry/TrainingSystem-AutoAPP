@@ -80,7 +80,8 @@
                         CommandParameter="Login"
                         Content="登录系统"
                         DockPanel.Dock="Top"
-                        FontSize="16" />
+                        FontSize="16"
+                        Foreground="White" />
 
                     <DockPanel Margin="0,5" LastChildFill="False">
                         <TextBlock
@@ -155,7 +156,8 @@
                         Command="{Binding ExecuteCommand}"
                         CommandParameter="Register"
                         Content="注册账号"
-                        DockPanel.Dock="Top" />
+                        DockPanel.Dock="Top"
+                        Foreground="White" />
 
                     <Button
                         Margin="0,5"

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Modules\RecordModule\RecordModule.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Images\User.png" />
+  </ItemGroup>
+
 </Project>

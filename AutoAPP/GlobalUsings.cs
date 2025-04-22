@@ -16,14 +16,33 @@ global using System.Windows.Media;
 global using System.Windows.Media.Imaging;
 global using System.Windows.Navigation;
 global using System.Windows.Shapes;
+
 global using MaterialDesignThemes.Wpf;
+global using RestSharp;
 global using Prism.Ioc;
 global using Prism.Modularity;
 global using Prism.Mvvm;
 global using Prism.Dialogs;
 global using Prism.Navigation.Regions;
-global using RestSharp;
 global using DryIoc;
 global using Prism.DryIoc;
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+global using CommunityToolkit.Mvvm.Messaging;
+global using CommunityToolkit.Mvvm.Collections;
+global using CommunityToolkit.Mvvm;
 
-
+global using AutoShared;
+global using AutoShared.Dtos;
+global using AutoShared.Parameters;
+global using AutoAPP.Core;
+global using AutoAPP.Core.Converters;
+global using AutoAPP.Core.Dialogs;
+global using AutoAPP.Core.Dialogs.Interface;
+global using AutoAPP.Core.Events;
+global using AutoAPP.Core.Extensions;
+global using AutoAPP.Core.Service;
+global using AutoAPP.Core.Service.Interface;
+global using AutoAPP.Core.Service.Client;
+global using AutoAPP.Core.ViewModels;
+global using AutoAPP.Core.Views;
