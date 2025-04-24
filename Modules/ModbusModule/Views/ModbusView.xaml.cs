@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModbusModule.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,15 @@ namespace ModbusModule.Views
         public ModbusView()
         {
             InitializeComponent();
+        }
+
+        // 指定的事件处理方法
+        private void LogTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // sender 就是触发事件的 TextBox
+            TextBox? textBox = sender as TextBox;
+            // 调用 ScrollToEnd() 方法将滚动条移动到内容的最后
+            textBox?.ScrollToEnd();
         }
     }
 }

@@ -19,16 +19,16 @@ namespace AutoAPP.Core.Dialogs.Interface
         /// 打开过程中执行
         /// </summary>
         /// <param name="parameters"></param>
-        void OnDialogOpend(IDialogParameters parameters);
+        public void OnDialogOpend(IDialogParameters parameters);
 
         /// <summary>
         /// 确定
         /// </summary>
-        void Save();
+        public void Save();
 
         /// <summary>
         /// 取消
         /// </summary>
-        void Cancel();
+        public void Cancel();
     }
 }

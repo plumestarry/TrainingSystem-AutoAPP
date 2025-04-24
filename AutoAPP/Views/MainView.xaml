@@ -161,15 +161,12 @@
                 </Grid>
 
                 <!--  定义一个标题栏区域  -->
-                <Border
-                    Name="DraggableArea"
-                    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-                    VerticalAlignment="Top"
-                    Background="Transparent">
+                <DockPanel LastChildFill="False">
                     <StackPanel
                         Grid.Column="1"
                         Margin="10"
                         HorizontalAlignment="Right"
+                        DockPanel.Dock="Top"
                         Orientation="Horizontal">
                         <Button
                             x:Name="btnMin"
@@ -185,7 +182,14 @@
                             Content="✕"
                             Style="{StaticResource MaterialDesignFlatLightButton}" />
                     </StackPanel>
-                </Border>
+                </DockPanel>
+
+                <Border
+                    Name="DraggableArea"
+                    Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                    Height="8"
+                    VerticalAlignment="Top"
+                    Background="Transparent" />
 
                 <!--  提示弹窗  -->
                 <materialDesign:Snackbar

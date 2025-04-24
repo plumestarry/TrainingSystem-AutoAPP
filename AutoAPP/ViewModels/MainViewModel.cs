@@ -76,6 +76,7 @@ namespace AutoAPP.ViewModels
 
         void CreateMenuBar()
         {
+            MenuBars?.Add(new MenuBar() { Icon = "AccessPointNetwork", Title = "Modbus", NameSpace = "ModbusView" });
             MenuBars?.Add(new MenuBar() { Icon = "InformationOutline", Title = "关于本平台", NameSpace = "AboutView" });
         }
 

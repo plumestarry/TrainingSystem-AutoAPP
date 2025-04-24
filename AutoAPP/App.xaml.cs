@@ -14,6 +14,7 @@ using AutoAPP.ViewModels;
 using AboutModule.Views;
 using AboutModule;
 using Prism.Ioc;
+using ModbusModule;
 
 namespace AutoAPP;
 
@@ -36,6 +37,7 @@ public partial class App : PrismApplication
         moduleCatalog.AddModule<CoreModuleConfigure>();
         moduleCatalog.AddModule<LoginModuleConfigure>();
         moduleCatalog.AddModule<AboutModuleConfigure>();
+        moduleCatalog.AddModule<ModbusModuleConfigure>();
     }
 
     protected override void ConfigureRegionAdapterMappings(RegionAdapterMappings regionAdapterMappings)
