@@ -4,6 +4,8 @@ using AutoAPP.Core.Service;
 using AutoAPP.Core.Service.Interface;
 using AutoAPP.Core.ViewModels;
 using AutoAPP.Core.Views;
+using ModbusModule.Methods;
+using ModbusModule.Methods.Interface;
 using ModbusModule.ViewModels;
 using ModbusModule.ViewModels.Dialogs;
 using ModbusModule.Views;
@@ -26,6 +28,8 @@ namespace ModbusModule
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             //containerRegistry.RegisterForNavigation<ModbusView, ModbusViewModel>();
+            containerRegistry.Register<IModbusTcp, ModbusTcp>();
+
             containerRegistry.RegisterForNavigation<ModbusView, ModbusViewModel>();
             containerRegistry.RegisterForNavigation<ConnectView, ConnectViewModel>();
         }

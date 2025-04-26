@@ -11,7 +11,7 @@ namespace ModbusModule.Models
     public partial class ModbusConfig : ObservableObject
     {
         [ObservableProperty]
-        string iPAddress = "127.0.0.1";
+        string? iPAddress;
 
         [ObservableProperty]
         int port;

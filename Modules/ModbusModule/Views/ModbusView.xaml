@@ -281,7 +281,7 @@
                         HorizontalScrollBarVisibility="Disabled"
                         IsReadOnly="True"
                         Style="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
-                        Text="{Binding LogMessages, Mode=OneWay}"
+                        Text="{Binding LogMessage.LogMessages, Mode=OneWay}"
                         TextWrapping="Wrap"
                         VerticalScrollBarVisibility="Disabled" />
                 </ScrollViewer>

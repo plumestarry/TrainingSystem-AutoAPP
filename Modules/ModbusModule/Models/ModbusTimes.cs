@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ModbusModule.Models
 {
-    public class ModbusOptions : ModbusConfig
+    public class ModbusTimes
     {
         /// <summary>
         /// 连接超时时间（毫秒），默认为 5000ms (5秒)。
@@ -23,6 +23,11 @@ namespace ModbusModule.Models
         /// 写入操作的超时时间（毫秒），默认为 1000ms (1秒)。
         /// </summary>
         public int WriteTimeoutMs { get; set; } = 1000;
+
+        /// <summary>
+        /// 轮询间隔时间（毫秒），默认为 50ms
+        /// </summary>
+        public int PollIntervalMs { get; set; } = 50;
     }
 
 }

@@ -20,6 +20,9 @@ namespace ModbusModule.Models
         string? name;
 
         [ObservableProperty]
-        int port = 0;
+        ushort port = 0;
+
+        [ObservableProperty]
+        int status = 0;
     }
 }

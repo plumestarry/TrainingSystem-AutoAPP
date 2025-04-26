@@ -112,7 +112,7 @@ namespace ModbusModule.Methods
                             Index = reader.GetInt32(0),
                             ModbusType = reader.IsDBNull(1) ? null : reader.GetString(1),
                             Name = reader.IsDBNull(2) ? null : reader.GetString(2),
-                            Port = reader.GetInt32(3)
+                            Port = (ushort)reader.GetInt32(3)
                         });
                     }
                 }

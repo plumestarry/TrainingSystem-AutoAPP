@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ModbusModule.Methods;
+using ModbusModule.Methods.Interface;
 using ModbusModule.Models;
 using System;
 using System.Collections;
@@ -23,21 +24,42 @@ namespace ModbusModule.ViewModels
     {
         private readonly IDialogHostService dialog;
 
-        public ModbusViewModel(IContainerProvider containerProvider, IDialogHostService dialog) : base(containerProvider)
+        private readonly IModbusTcp ModbusService;
+
+        public ModbusViewModel(IModbusTcp ModbusService, IContainerProvider containerProvider, IDialogHostService dialog) : base(containerProvider)
         {
 
             this.dialog = dialog;
-            AppendLogMessage("应用程序启动");
+            // 测试初始化集合
+            ModbusConfig = new ModbusConfig() { IPAddress = "127.0.0.1", Port = 502, SlaveID = 1 };
+            ModbusTimes = new ModbusTimes();
+
+            this.ModbusService = ModbusService;
+
+            LogMessage = new LogMessage(ConnectionString);
+            LogMessage.AppendLogMessage("初始化完成！");
 
         }
 
         #region ****************************** 连接逻辑代码 ******************************
 
         [ObservableProperty]
-        private bool isConnected;
+        public string connectButtonText = "连接";
 
-        [ObservableProperty]
-        public string connectButtonText;
+        [RelayCommand]
+        void Connect() 
+        {
+            if (ConnectButtonText == "连接")
+            {
+                ModbusService.ConnectAsync(ModbusConfig, ModbusTimes, LogMessage, InputItems, OutputItems);
+                ConnectButtonText = "断开";
+            }
+            else
+            {
+                ModbusService.Disconnect();
+                ConnectButtonText = "连接";
+            }
+        }
 
 
         #endregion ****************************** 连接逻辑代码 ******************************
@@ -46,6 +68,9 @@ namespace ModbusModule.ViewModels
 
         [ObservableProperty]
         private ModbusConfig modbusConfig;
+
+        [ObservableProperty]
+        private ModbusTimes modbusTimes;
 
         [RelayCommand]
         async Task Config()
@@ -83,7 +108,7 @@ namespace ModbusModule.ViewModels
                     //        summary.MemoList.Add(addResult.Result);
                     //    }
                     //}
-                    AppendLogMessage("ModbusConfig 配置成功！");
+                    LogMessage.AppendLogMessage("ModbusConfig 配置成功！");
                 }
                 finally
                 {
@@ -96,40 +121,8 @@ namespace ModbusModule.ViewModels
 
         #region ****************************** 消息日志滚动配置代码 ******************************
 
-        // 定义日志保存阈值和移除数量
-        private const int LogThreshold = 100; // 达到 100 条时触发保存
-        private const int LinesToSaveAndRemove = 50; // 保存并移除前 50 条
-
-        // 用一个 List 来存储所有的日志行
-        private readonly List<string> logLines = new List<string>();
-
-        // 绑定到 Textbox 的属性，需要触发 PropertyChanged 通知
         [ObservableProperty]
-        private string logMessages = "";
-
-        public void AppendLogMessage(string message)
-        {
-            string timestampedMessage = $"{DateTime.Now:HH:mm:ss} - {message}";
-
-            // 将新消息添加到内部列表中
-            logLines.Add(timestampedMessage);
-
-            // 检查是否达到保存阈值
-            if (logLines.Count >= LogThreshold)
-            {
-                // 提取需要保存的旧日志（前 LinesToSaveAndRemove 条）
-                List<string> linesToSave = logLines.Take(LinesToSaveAndRemove).ToList();
-
-                IODataMethod.SaveModbusData(ConnectionString, linesToSave);
-
-                // 移除已保存的日志行
-                logLines.RemoveRange(0, LinesToSaveAndRemove);
-            }
-
-            // 重新生成 LogMessages 字符串并更新绑定的属性
-            // 使用 Environment.NewLine 确保跨平台兼容换行符
-            LogMessages = string.Join(Environment.NewLine, logLines);
-        }
+        private LogMessage logMessage;
 
         #endregion ****************************** 消息日志滚动配置代码 ******************************
 

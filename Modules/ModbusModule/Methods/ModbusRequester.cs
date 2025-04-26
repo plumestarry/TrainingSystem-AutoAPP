@@ -8,24 +8,19 @@ using System.Threading.Tasks;
 
 namespace ModbusModule.Methods
 {
-    public class ModbusRequester : IModbusRequester
+    /// <summary>
+    /// 初始化 ModbusRequester 的新实例。
+    /// </summary>
+    /// <param name="masterProvider">
+    /// 一个委托 (Function)，当需要执行 Modbus 操作时调用它。
+    /// 这个委托应该返回当前有效的 IModbusMaster 实例，
+    /// 并在未连接或 Master 无效时抛出异常 (例如 InvalidOperationException)。
+    /// </param>
+    /// <exception cref="ArgumentNullException">如果 masterProvider 为 null。</exception>
+    public class ModbusRequester(Func<IModbusMaster> masterProvider) : IModbusRequester
     {
         // 用于获取当前有效 IModbusMaster 实例的委托
-        private readonly Func<IModbusMaster> _masterProvider;
-
-        /// <summary>
-        /// 初始化 ModbusRequester 的新实例。
-        /// </summary>
-        /// <param name="masterProvider">
-        /// 一个委托 (Function)，当需要执行 Modbus 操作时调用它。
-        /// 这个委托应该返回当前有效的 IModbusMaster 实例，
-        /// 并在未连接或 Master 无效时抛出异常 (例如 InvalidOperationException)。
-        /// </param>
-        /// <exception cref="ArgumentNullException">如果 masterProvider 为 null。</exception>
-        public ModbusRequester(Func<IModbusMaster> masterProvider)
-        {
-            _masterProvider = masterProvider ?? throw new ArgumentNullException(nameof(masterProvider));
-        }
+        private readonly Func<IModbusMaster> _masterProvider = masterProvider ?? throw new ArgumentNullException(nameof(masterProvider));
 
         /// <summary>
         /// 获取当前的 IModbusMaster 实例。如果提供者无法提供（例如未连接），则会抛出异常。

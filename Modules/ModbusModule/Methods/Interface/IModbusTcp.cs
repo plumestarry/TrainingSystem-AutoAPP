@@ -1,6 +1,7 @@
 ﻿using ModbusModule.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,8 @@ namespace ModbusModule.Methods.Interface
         /// </summary>
         /// <param name="options">Modbus TCP 连接配置选项。</param>
         /// <returns>表示异步连接操作的 Task。</returns>
-        Task ConnectAsync(ModbusOptions options);
+        Task ConnectAsync(ModbusConfig configs, ModbusTimes options, LogMessage LogMessage,
+            ObservableCollection<ModbusItems> InputItems, ObservableCollection<ModbusItems> OutputItems);
 
         /// <summary>
         /// 断开与 Modbus TCP 服务器的连接。
