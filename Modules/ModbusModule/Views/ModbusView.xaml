@@ -272,7 +272,7 @@
                 Grid.Row="1"
                 Margin="0,5,0,0"
                 Padding="5">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ScrollViewer x:Name="LogScrollViewer" VerticalScrollBarVisibility="Auto">
                     <TextBox
                         x:Name="LogTextBox"
                         HorizontalAlignment="Stretch"
@@ -282,6 +282,7 @@
                         IsReadOnly="True"
                         Style="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
                         Text="{Binding LogMessage.LogMessages, Mode=OneWay}"
+                        TextChanged="LogTextBox_TextChanged"
                         TextWrapping="Wrap"
                         VerticalScrollBarVisibility="Disabled" />
                 </ScrollViewer>

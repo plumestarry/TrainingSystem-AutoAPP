@@ -3,286 +3,79 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-    xmlns:cv="clr-namespace:AutoAPP.Core.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:AutoAPP.Views"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:viewmodels="clr-namespace:AutoAPP.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <!--<UserControl.Resources>
-        <cv:IntToBoolConveter x:Key="intToBool" />
-    </UserControl.Resources>-->
-    <Grid>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
 
-        <TextBlock
-            Grid.Row="0"
-            Margin="15,10"
-            HorizontalAlignment="Center"
-            FontSize="24"
-            Text="{Binding Title}" />
+    <Grid Margin="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding TaskBars}">
+        <Grid Grid.Column="0" Margin="0,0,16,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="4" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+            <StackPanel
+                Grid.Row="0"
+                Margin="16"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <md:PackIcon
+                    Width="48"
+                    Height="48"
+                    Margin="0,0,0,8"
+                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                    Kind="HomeAnalytics" />
+                <TextBlock
+                    Margin="0,0,0,8"
+                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                    Text="{Binding WelcomeMessage}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    x:Name="TimeTextBlock"
+                    Foreground="{DynamicResource MaterialDesignBodyLight}"
+                    Style="{StaticResource MaterialDesignBody1TextBlock}"
+                    Text="{Binding CurrentTimeText, Mode=OneWay}" />
+            </StackPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border
-                        Margin="10"
-                        Background="{Binding Color}"
-                        CornerRadius="5">
+            <lvc:PieChart
+                Grid.Row="1"
+                Margin="16"
+                LegendPosition="Bottom"
+                Series="{Binding PieChartSeries}" />
 
-                        <Border.InputBindings>
-                            <MouseBinding
-                                Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                CommandParameter="{Binding}"
-                                MouseAction="LeftClick" />
-                        </Border.InputBindings>
+        </Grid>
 
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Effect">
-                                            <Setter.Value>
-                                                <DropShadowEffect
-                                                    BlurRadius="10"
-                                                    ShadowDepth="10"
-                                                    Color="#DDDDDD" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
+        <ScrollViewer
+            Grid.Column="1"
+            md:ScrollViewerAssist.IsAutoHideEnabled="True"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Disabled">
 
-                        <Grid>
-        -->
-        <!--  图标、标题、内容  -->
-        <!--
-                            <StackPanel Margin="20,10">
-                                <materialDesign:PackIcon
-                                    Width="30"
-                                    Height="30"
-                                    Kind="{Binding Icon}" />
-                                <TextBlock
-                                    Margin="0,15"
-                                    FontSize="15"
-                                    Text="{Binding Title}" />
-                                <TextBlock
-                                    FontSize="40"
-                                    FontWeight="Bold"
-                                    Text="{Binding Content}" />
-                            </StackPanel>
-        -->
-        <!--  圆圈样式  -->
-        <!--
-                            <Canvas ClipToBounds="True">
-                                <Border
-                                    Canvas.Top="10"
-                                    Canvas.Right="-50"
-                                    Width="120"
-                                    Height="120"
-                                    Background="#FFFFFF"
-                                    CornerRadius="100"
-                                    Opacity="0.1" />
-                                <Border
-                                    Canvas.Top="80"
-                                    Canvas.Right="-30"
-                                    Width="120"
-                                    Height="120"
-                                    Background="#FFFFFF"
-                                    CornerRadius="100"
-                                    Opacity="0.1" />
-                            </Canvas>
-                        </Grid>
+            <ItemsControl ItemsSource="{Binding InfoCards}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-
-        </ItemsControl>
-
-        <Grid Grid.Row="2" Margin="0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-
-        -->
-        <!--  待办事项  -->
-        <!--
-            <Border
-                Margin="10,0"
-                Background="#BEBEBE"
-                CornerRadius="5"
-                Opacity="0.1" />
-            <DockPanel Margin="10,0">
-                <DockPanel
-                    Margin="10,5"
-                    DockPanel.Dock="Top"
-                    LastChildFill="False">
-                    <TextBlock
-                        FontSize="20"
-                        FontWeight="Bold"
-                        Text="待办事项" />
-                    <Button
-                        Width="30"
-                        Height="30"
-                        VerticalAlignment="Top"
-                        Command="{Binding ExecuteCommand}"
-                        CommandParameter="新增待办"
-                        DockPanel.Dock="Right"
-                        Style="{StaticResource MaterialDesignFloatingActionButton}">
-                        <materialDesign:PackIcon Kind="Add" />
-                    </Button>
-                </DockPanel>
-
-        -->
-        <!--<ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding NotebookDTOs}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel MaxHeight="80" LastChildFill="False">
-                                <ToggleButton DockPanel.Dock="Right" />
-                                <StackPanel>
-                                    <TextBlock
-                                        FontSize="16"
-                                        FontWeight="Bold"
-                                        Text="{Binding Title}" />
-                                    <TextBlock
-                                        Margin="0,5"
-                                        Opacity="0.5"
-                                        Text="{Binding Content}" />
-                                </StackPanel>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>-->
-        <!--
-
-                <ListBox
-                    x:Name="notebookList"
-                    HorizontalContentAlignment="Stretch"
-                    ItemsSource="{Binding Summary.NotebookList}">
-
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <i:InvokeCommandAction Command="{Binding EditNotebookCommand}" CommandParameter="{Binding ElementName=notebookList, Path=SelectedItem}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel MaxHeight="80" LastChildFill="False">
-                                <ToggleButton
-                                    Command="{Binding DataContext.NotebookCompltedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                    CommandParameter="{Binding}"
-                                    DockPanel.Dock="Right"
-                                    IsChecked="{Binding Status, Converter={StaticResource intToBool}}" />
-                                <StackPanel>
-                                    <TextBlock
-                                        FontSize="16"
-                                        FontWeight="Bold"
-                                        Text="{Binding Title}" />
-                                    <TextBlock
-                                        Margin="0,5"
-                                        Opacity="0.5"
-                                        Text="{Binding Content}" />
-                                </StackPanel>
-                            </DockPanel>
-
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </DockPanel>
-
-        -->
-        <!--  备忘录  -->
-        <!--
-            <Border
-                Grid.Column="1"
-                Margin="10,0"
-                Background="#BEBEBE"
-                CornerRadius="5"
-                Opacity="0.1" />
-            <DockPanel Grid.Column="1" Margin="10,0">
-                <DockPanel
-                    Margin="10,5"
-                    DockPanel.Dock="Top"
-                    LastChildFill="False">
-                    <TextBlock
-                        FontSize="20"
-                        FontWeight="Bold"
-                        Text="备忘录" />
-                    <Button
-                        Width="30"
-                        Height="30"
-                        VerticalAlignment="Top"
-                        Command="{Binding ExecuteCommand}"
-                        CommandParameter="新增备忘录"
-                        DockPanel.Dock="Right"
-                        Style="{StaticResource MaterialDesignFloatingActionButton}">
-                        <materialDesign:PackIcon Kind="Add" />
-                    </Button>
-                </DockPanel>
-
-        -->
-        <!--<ListBox ItemsSource="{Binding MemoDTOs}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel MaxHeight="80">
-                                <TextBlock
-                                    FontSize="16"
-                                    FontWeight="Bold"
-                                    Text="{Binding Title}" />
-                                <TextBlock
-                                    Margin="0,5"
-                                    Opacity="0.5"
-                                    Text="{Binding Content}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>-->
-        <!--
-
-                <ListBox x:Name="memoList" ItemsSource="{Binding Summary.MemoList}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <i:InvokeCommandAction Command="{Binding EditMemoCommand}" CommandParameter="{Binding ElementName=memoList, Path=SelectedItem}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel MaxHeight="80">
-                                <TextBlock
-                                    FontSize="16"
-                                    FontWeight="Bold"
-                                    Text="{Binding Title}" />
-                                <TextBlock
-                                    Margin="0,5"
-                                    Opacity="0.5"
-                                    Text="{Binding Content}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </DockPanel>
-
-        </Grid>-->
-
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate />
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
+
 </UserControl>

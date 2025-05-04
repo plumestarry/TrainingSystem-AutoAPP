@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using ModbusModule.Methods;
 using ModbusModule.Methods.Interface;
 using ModbusModule.Models;
+using Prism.Ioc;
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -93,7 +93,10 @@
 
                             </StackPanel>
 
-                            <DockPanel Grid.Row="1" LastChildFill="False">
+                            <DockPanel
+                                Grid.Row="1"
+                                Margin="0,16"
+                                LastChildFill="False">
 
                                 <ItemsControl
                                     HorizontalAlignment="Left"
@@ -136,7 +139,7 @@
 
                             <DockPanel
                                 Grid.Row="3"
-                                Margin="0,10"
+                                Margin="0,16"
                                 LastChildFill="False">
                                 <Button
                                     Name="MenuButton"

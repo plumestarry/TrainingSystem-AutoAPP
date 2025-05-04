@@ -1,5 +1,4 @@
-﻿using ModbusModule.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,22 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ModbusModule.Views
+namespace ChartModule.Views
 {
     /// <summary>
-    /// ModbusView.xaml 的交互逻辑
+    /// ChartView.xaml 的交互逻辑
     /// </summary>
-    public partial class ModbusView : UserControl
+    public partial class ChartView : UserControl
     {
-        public ModbusView()
+        public ChartView()
         {
             InitializeComponent();
-        }
-
-        // 指定的事件处理方法
-        private void LogTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            LogScrollViewer.ScrollToBottom();
         }
     }
 }

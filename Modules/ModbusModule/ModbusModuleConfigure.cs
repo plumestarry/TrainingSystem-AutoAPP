@@ -10,6 +10,8 @@ using ModbusModule.ViewModels;
 using ModbusModule.ViewModels.Dialogs;
 using ModbusModule.Views;
 using ModbusModule.Views.Dialogs;
+using Prism.Ioc;
+using Prism.Modularity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +24,6 @@ namespace ModbusModule
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

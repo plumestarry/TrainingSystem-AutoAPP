@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using ModbusModule.Models;
+using Prism.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

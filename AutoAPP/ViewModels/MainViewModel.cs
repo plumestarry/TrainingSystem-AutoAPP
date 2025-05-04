@@ -24,7 +24,7 @@ namespace AutoAPP.ViewModels
         }
 
         [ObservableProperty]
-        string userName;
+        string userName = "Guest";
 
         [ObservableProperty]
         char initial;
@@ -76,8 +76,10 @@ namespace AutoAPP.ViewModels
 
         void CreateMenuBar()
         {
-            MenuBars?.Add(new MenuBar() { Icon = "AccessPointNetwork", Title = "Modbus", NameSpace = "ModbusView" });
             MenuBars?.Add(new MenuBar() { Icon = "InformationOutline", Title = "关于本平台", NameSpace = "AboutView" });
+            MenuBars?.Add(new MenuBar() { Icon = "ChartBar", Title = "Chart", NameSpace = "ChartView" });
+            MenuBars?.Add(new MenuBar() { Icon = "AccessPointNetwork", Title = "Modbus", NameSpace = "ModbusView" });
+            
         }
 
         /// <summary>
