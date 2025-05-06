@@ -10,4 +10,9 @@ namespace AutoAPP.Core.Extensions
     {
         public static string UserName { get; set; }
     }
+
+    public static class AppTraining
+    {
+        public static bool IsTraining { get; set; }
+    }
 }

@@ -33,11 +33,11 @@
                     BorderThickness="1"
                     CornerRadius="8">
                     <lvc:CartesianChart
-                        Margin="16"
+                        Margin="16,64,16,16"
                         LegendPosition="Bottom"
-                        Series="{Binding Series}"
-                        XAxes="{Binding XAxes}"
-                        YAxes="{Binding YAxes}" />
+                        Series="{Binding StatisticData.Series, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        XAxes="{Binding StatisticData.XAxes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        YAxes="{Binding StatisticData.YAxes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Border>
                 <TextBlock
                     Margin="0,-12,0,0"
@@ -67,48 +67,103 @@
                     CornerRadius="8">
                     <Grid Margin="8">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <GroupBox
+                        <StackPanel
                             Grid.Row="0"
-                            Margin="16,32,16,0"
-                            Header="输出信息"
-                            Style="{StaticResource MaterialDesignGroupBox}">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <TextBox
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    md:HintAssist.Hint="输出信息"
-                                    AcceptsReturn="True"
-                                    HorizontalScrollBarVisibility="Disabled"
-                                    IsReadOnly="True"
-                                    Style="{DynamicResource MaterialDesignDataGridTextColumnEditingStyle}"
-                                    Text="{Binding OutputText}"
-                                    TextWrapping="Wrap"
-                                    VerticalScrollBarVisibility="Disabled" />
-                            </ScrollViewer>
-                        </GroupBox>
+                            Margin="16,48,16,0"
+                            Orientation="Horizontal">
+                            <md:PackIcon
+                                Width="24"
+                                Height="24"
+                                Margin="0,0,16,0"
+                                VerticalAlignment="Center"
+                                Kind="RhombusSplit" />
+                            <TextBlock
+                                FontWeight="Bold"
+                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Text="当前实训模式：" />
+                            <TextBlock
+                                Margin="16,0"
+                                FontWeight="Bold"
+                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                Text="{Binding SelectedCommunicationEntity, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
 
-                        <ComboBox
+                        <Border
                             Grid.Row="1"
-                            Margin="16,16,16,0"
-                            md:HintAssist.Hint="选择实训模式"
-                            ItemsSource="{Binding CommunicationEntities}"
-                            SelectedItem="{Binding SelectedCommunicationEntity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                            Margin="16"
+                            Background="Transparent">
 
-                        <DockPanel Grid.Row="2" Margin="16,16,16,16">
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel
+                                    Margin="0,16,0,16"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <md:PackIcon
+                                        Width="24"
+                                        Height="24"
+                                        Margin="0,0,16,0"
+                                        VerticalAlignment="Center"
+                                        Kind="LinkVariant" />
+
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                        Text="客户端数据：" />
+                                </StackPanel>
+
+                                <ItemsControl ItemsSource="{Binding ClientItems}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Margin="32,16,0,0"
+                                                VerticalAlignment="Center"
+                                                Orientation="Horizontal">
+                                                <Ellipse
+                                                    Width="12"
+                                                    Height="12"
+                                                    Margin="0,0,16,0"
+                                                    VerticalAlignment="Center"
+                                                    Fill="{Binding ItemColor}" />
+                                                <TextBlock
+                                                    Margin="0,0,16,0"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="Consolas"
+                                                    Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                                    Text="{Binding ItemLabel}" />
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    FontWeight="SemiBold"
+                                                    Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                                    Text="{Binding ItemValue}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                            </StackPanel>
+                        </Border>
+
+
+
+                        <DockPanel Grid.Row="2" Margin="16,16,16,32">
                             <Button
                                 Margin="0,0,8,0"
+                                Command="{Binding TrainingBeginCommand}"
                                 Content="实训开始"
                                 DockPanel.Dock="Left"
+                                IsEnabled="{Binding TrainingEnabled}"
                                 Style="{DynamicResource MaterialDesignOutlinedButton}" />
                             <Button
                                 Margin="8,0,0,0"
-                                Content="上传记录"
+                                Command="{Binding TrainingStopCommand}"
+                                Content="停止实训"
                                 DockPanel.Dock="Right"
                                 Style="{DynamicResource MaterialDesignOutlinedButton}" />
                             <Border Background="Transparent" />

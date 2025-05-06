@@ -57,6 +57,18 @@ namespace ModbusModule.Methods
             return master.ReadInputRegistersAsync(unitId, startAddress, numberOfPoints);
         }
 
+        public Task WriteSingleCoilAsync(byte unitId, ushort startAddress, bool values)
+        {
+            var master = GetMaster();
+            return master.WriteSingleCoilAsync(unitId, startAddress, values);
+        }
+
+        public Task WriteSingleRegisterAsync(byte unitId, ushort startAddress, ushort values)
+        {
+            var master = GetMaster();
+            return master.WriteSingleRegisterAsync(unitId, startAddress, values);
+        }
+
         public Task WriteMultipleCoilsAsync(byte unitId, ushort startAddress, bool[] values)
         {
             var master = GetMaster();

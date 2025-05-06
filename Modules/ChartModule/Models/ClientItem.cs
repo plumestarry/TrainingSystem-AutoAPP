@@ -6,23 +6,17 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace ModbusModule.Models
+namespace ChartModule.Models
 {
-    public partial class ModbusItems : ObservableObject
+    public partial class ClientItem : ObservableObject
     {
         [ObservableProperty]
-        int index;
+        string? itemColor;
 
         [ObservableProperty]
-        string? modbusType;
+        string? itemLabel;
 
         [ObservableProperty]
-        string? name;
-
-        [ObservableProperty]
-        ushort port = 0;
-
-        [ObservableProperty]
-        ushort status = 0;
+        int itemValue;
     }
 }

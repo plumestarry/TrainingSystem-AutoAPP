@@ -1,9 +1,11 @@
 ﻿using ModbusModule.Methods.Interface;
 using ModbusModule.Models;
+using ModbusModule.ViewModels;
 using NModbus;
 using NModbus.Device;
 using System.Collections.ObjectModel;
 using System.Net.Sockets;
+using System.Windows.Markup;
 
 namespace ModbusModule.Methods
 {
@@ -79,12 +81,15 @@ namespace ModbusModule.Methods
             }
         }
 
+        public ModbusConfig? ModbusConfig { get; set; }
+
         #endregion ****************************** 配置信息 ******************************
 
         #region ****************************** 连接创建和轮询逻辑 ******************************
 
         public async Task ConnectAsync(ModbusConfig configs, ModbusTimes options, LogMessage LogMessage, 
-            ObservableCollection<ModbusItems> InputItems, ObservableCollection<ModbusItems> OutputItems)
+            ObservableCollection<ModbusItems> InputItems, ObservableCollection<ModbusItems> OutputItems,
+            SynchronizationContext uiContext)
         {
             // 在尝试连接前加锁，避免多重连接尝试
             lock (_lock)
@@ -112,6 +117,7 @@ namespace ModbusModule.Methods
                 IModbusMaster? master = null;
                 IModbusRequester? requester = null;
                 Task? communicationTask = null;
+                ModbusConfig = configs; // 设置 ModbusConfig
 
                 client = new TcpClient();
                 // ConnectAsync 是异步的，不阻塞调用线程
@@ -164,6 +170,7 @@ namespace ModbusModule.Methods
                         portRanges,
                         InputItems,
                         OutputItems,
+                        uiContext,
                         cancellationToken
                         ), cancellationToken);
                 }
@@ -199,6 +206,7 @@ namespace ModbusModule.Methods
             Dictionary<string, (ushort MinAddress, ushort MaxAddress)> portRanges,
             ObservableCollection<ModbusItems> inputItems,
             ObservableCollection<ModbusItems> outputItems,
+            SynchronizationContext uiContext,
             CancellationToken cancellationToken)
         {
             LogMessage.AppendLogMessage("Modbus 通信启动成功");
@@ -300,7 +308,7 @@ namespace ModbusModule.Methods
                                 /// 如果数据发生改变，更新 lastKnownData 并调用静态方法更新 InputItems / OutputItems
                                 if (dataChanged)
                                 {
-                                    LogMessage.AppendLogMessage(modbusData is Array array ? string.Join(", ", array.Cast<object>()) : string.Empty);
+                                    LogMessage.AppendLogMessage($"{dataTypeKey.PadRight(16)}：" + (modbusData is Array array ? string.Join(", ", array.Cast<object>()) : string.Empty));
                                     // 更新上次已知数据
                                     lastKnownData[dataTypeKey] = modbusData!; // modbusData 在这里不会为 null，因为 dataChanged == true 隐含 modbusData != null
 
@@ -329,6 +337,24 @@ namespace ModbusModule.Methods
 
                                         // 重要：如果 targetCollection 绑定到 UI 控件，这里的更新必须在 UI 线程上进行！
                                         // 确保 ModbusDataProcessor.UpdateItemsFromModbusData 方法内部正确处理了 UI 线程封送。
+                                        // *** 使用 UI 线程上下文将更新操作调度回 UI 线程 ***
+                                        uiContext.Post(state =>
+                                        {
+                                            // 这个 Lambda 表达式将在 UI 线程上执行
+                                            // state 参数是 Post 传递的第二个参数，这里用不到可以传 null
+
+                                            // 在这里调用你的 ModbusDataProcessor.UpdateItemsFromModbusData 方法
+                                            // 或者直接在这里修改 targetCollection 及其项的属性
+                                            PollingMethod.UpdateItemsFromModbusData(targetCollection, dataTypeKey, startAddress, modbusData);
+
+                                            // 示例：更新集合中的某个项
+                                            // var itemToUpdate = targetCollection.FirstOrDefault(...);
+                                            // if (itemToUpdate != null)
+                                            // {
+                                            //     itemToUpdate.Value = newValue; // 假设 ModbusItem 实现了 INotifyPropertyChanged
+                                            // }
+
+                                        }, null); // null 作为 state 参数
                                     }
 
                                 }
@@ -375,7 +401,7 @@ namespace ModbusModule.Methods
                         LogMessage.AppendLogMessage($"未预料的异常: {ex.Message}");
                         lock (_lock)
                         {
-                            IsConnected = false; // 使用属性의 setter
+                            IsConnected = false; // 使用属性性 setter
                         }
                         // 触发 ErrorOccurred 事件
                         ErrorOccurred?.Invoke(this, new Exception("Unexpected error in communication loop.", ex));

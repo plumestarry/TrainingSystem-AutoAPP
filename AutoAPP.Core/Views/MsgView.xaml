@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock
-            Padding="5"
+            Padding="12"
             d:Text="温馨提示"
             FontSize="16"
             Text="{Binding Title}" />

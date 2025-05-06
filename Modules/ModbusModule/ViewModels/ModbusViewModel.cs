@@ -1,6 +1,8 @@
 ﻿using AutoAPP.Core.Dialogs.Interface;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using ModbusModule.Methods;
 using ModbusModule.Methods.Interface;
 using ModbusModule.Models;
@@ -45,18 +47,27 @@ namespace ModbusModule.ViewModels
         #region ****************************** 连接逻辑代码 ******************************
 
         [ObservableProperty]
-        public string connectButtonText = "连接";
+        public StatisticViewModel? chart = null;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedRecipients]
+        private string connectButtonText = "连接";
 
         [RelayCommand]
         void Connect() 
         {
             if (ConnectButtonText == "连接")
             {
-                ModbusService.ConnectAsync(ModbusConfig, ModbusTimes, LogMessage, InputItems, OutputItems);
+                SynchronizationContext? uiContext = SynchronizationContext.Current;
+                Chart = new StatisticViewModel(OutputItems);
+                WeakReferenceMessenger.Default.Send(new CreatedMessage(Chart, ModbusService));
+                ModbusService.ConnectAsync(ModbusConfig, ModbusTimes, LogMessage, InputItems, OutputItems, uiContext);
                 ConnectButtonText = "断开";
             }
             else
             {
+                Chart?.Dispose();
+                Chart = null;
                 ModbusService.Disconnect();
                 ConnectButtonText = "连接";
             }

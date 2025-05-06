@@ -17,7 +17,8 @@ namespace ModbusModule.Methods.Interface
         /// <param name="options">Modbus TCP 连接配置选项。</param>
         /// <returns>表示异步连接操作的 Task。</returns>
         Task ConnectAsync(ModbusConfig configs, ModbusTimes options, LogMessage LogMessage,
-            ObservableCollection<ModbusItems> InputItems, ObservableCollection<ModbusItems> OutputItems);
+            ObservableCollection<ModbusItems> InputItems, ObservableCollection<ModbusItems> OutputItems,
+            SynchronizationContext uiContext);
 
         /// <summary>
         /// 断开与 Modbus TCP 服务器的连接。
@@ -44,5 +45,7 @@ namespace ModbusModule.Methods.Interface
         /// 只有在连接成功 (IsConnected 为 true) 后才可用。
         /// </summary>
         IModbusRequester Requester { get; }
+
+        public ModbusConfig? ModbusConfig { get; set; }
     }
 }

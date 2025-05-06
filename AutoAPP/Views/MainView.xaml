@@ -197,7 +197,7 @@
                 <!--  提示弹窗  -->
                 <materialDesign:Snackbar
                     x:Name="Snackbar"
-                    Margin="0,40,0,0"
+                    Margin="0,40,0,40"
                     VerticalAlignment="Bottom"
                     Panel.ZIndex="1"
                     MessageQueue="{materialDesign:MessageQueue}" />

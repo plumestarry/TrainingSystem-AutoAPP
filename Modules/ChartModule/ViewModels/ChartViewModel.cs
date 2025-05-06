@@ -1,312 +1,148 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AutoAPP.Core.Dialogs.Interface;
+using AutoAPP.Core.Extensions;
+using AutoAPP.Core.ViewModels;
+using ChartModule.Methods;
+using ChartModule.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.Kernel;
-using LiveChartsCore.Kernel.Events;
+using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
-using System.Collections.Generic;
 using LiveChartsCore.SkiaSharpView.Painting;
+using ModbusModule.Methods;
+using ModbusModule.Methods.Interface;
+using ModbusModule.Models;
+using ModbusModule.ViewModels;
+using NModbus.Device;
+using Prism.Ioc;
 using SkiaSharp;
 using System.Collections.ObjectModel;
-using LiveChartsCore.Measure;
-using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace ChartModule.ViewModels
 {
-    // 新的数据类，用于存储每个条形的数据和样式
-    public class BarItemData // 不需要继承 ObservableValue unless you need live updates on individual points
+    public partial class ChartViewModel : NavigationViewModel, IRecipient<CreatedMessage>, IRecipient<PropertyChangedMessage<string>>
     {
-        public BarItemData(string name, int value, SolidColorPaint paint)
+        public IModbusTcp ModbusService { get; set; }
+
+        // 在构造函数中注册消息监听器
+        public ChartViewModel(IContainerProvider containerProvider) : base(containerProvider)
         {
-            Name = name;
-            Value = value;
-            Paint = paint;
+            // 注册监听 StatisticViewModelCreatedMessage 消息
+            WeakReferenceMessenger.Default.Register<CreatedMessage>(this);
+            WeakReferenceMessenger.Default.Register<PropertyChangedMessage<string>>(this);
+            ClientItems = new ObservableCollection<ClientItem>();
+            TrainingPort = new Dictionary<string, ushort>();
+
+            // 注意：WeakReferenceMessenger 使用弱引用，通常不需要手动注销
+            // 但如果你的 ViewModel 生命周期复杂，或者有很多订阅，可以考虑在 Dispose 或 OnNavigatedFrom 中注销
         }
 
-        public string Name { get; set; }
-        public int Value { get; set; }
-        public SolidColorPaint Paint { get; set; }
-    }
-
-    public partial class ChartViewModel : ObservableObject
-    {
-        // --- Data Sources ---
-        // ObservableCollection for dynamic updates of names
-        public ObservableCollection<string> ElementNames { get; set; }
-
-        // Dictionary to store dynamic values keyed by name
-        public Dictionary<string, int> ElementValues { get; set; }
-
-        // --- Chart Properties (Bindable) ---
-        // Use ObservableProperty attribute to automatically generate
-        // the property and INotifyPropertyChanged logic
-        //[ObservableProperty]
-        //private ISeries[] _series;
+        // 添加一个 ObservableProperty 来持有接收到的 StatisticViewModel 实例
+        [ObservableProperty]
+        private StatisticViewModel? statisticData;
 
         [ObservableProperty]
-        private ObservableCollection<ISeries> _series;
+        private string selectedCommunicationEntity = "Sort1";
 
         [ObservableProperty]
-        private Axis[] _xAxes;
+        private string? connectButtonText;
 
-        [ObservableProperty]
-        private Axis[] _yAxes;
-
-        // --- Simulation Fields ---
-        private bool _isUpdating = false;
-        private Random _random = new Random();
-        // --- Constructor ---
-        public ChartViewModel()
+        // 实现 IRecipient<StatisticViewModelCreatedMessage> 接口的 Receive 方法
+        // 当收到 StatisticViewModelCreatedMessage 消息时，此方法会被调用
+        public void Receive(CreatedMessage message)
         {
-            ElementNames = new ObservableCollection<string>();
-            ElementValues = new Dictionary<string, int>();
-            _series = new ObservableCollection<ISeries>();
+            // 从消息中获取 StatisticViewModel 实例
+            StatisticData = message.Value;
+            ModbusService = message.ModbusService;
 
-            // --- 在这里添加你的示例数据 ---
-
-            // --- 示例数据 A: 两个元素 ---
-            // ElementNames.Add("销量");
-            // ElementNames.Add("库存");
-            // ElementValues["销量"] = 350;
-            // ElementValues["库存"] = 120;
-
-            // --- 示例数据 B: 四个元素 ---
-            ElementNames.Add("产品 A");
-            ElementNames.Add("产品 B");
-            ElementNames.Add("产品 C");
-            ElementNames.Add("产品 D");
-            ElementValues["产品 A"] = 12;
-            ElementValues["产品 B"] = 33;
-            ElementValues["产品 C"] = 0;
-            ElementValues["产品 D"] = 39;
-
-            // --- 示例数据 C: 三个元素 (包含一个缺失值的项) ---
-            // ElementNames.Add("任务 1");
-            // ElementNames.Add("任务 2");
-            // ElementNames.Add("任务 3"); // 这个任务的值不在 ElementValues 中
-            // ElementValues["任务 1"] = 95;
-            // ElementValues["任务 2"] = 40;
-            // // 故意不添加 "任务 3" 的值
-
-            // --- End of Sample Data ---
-
-
-            // 初始化空的图表属性 (在填充数据之前，确保它们不是 null)
-            // 也可以在 UpdateChart() 内部处理首次赋值
-            //_series = Array.Empty<ISeries>();
-            _series = new ObservableCollection<ISeries>();
-            _xAxes = new Axis[] { new Axis() };
-            _yAxes = new Axis[] { new Axis() };
-
-
-            // Optional: Listen to changes in ElementNames if you want the chart to update automatically
-            //ElementNames.CollectionChanged += ElementNames_CollectionChanged;
-
-            // 在填充数据后，调用 UpdateChart 来生成图表系列和轴
-            UpdateChart();
-
-            _ = StartUpdating();
+            // 此时，StatisticData 属性已经被设置，ChartView 可以绑定到 ChartViewModel.StatisticData
+            // 并在 StatisticData 中访问如 OutputItems 等属性来更新图表显示。
+            // 例如，如果 StatisticViewModel 有一个 ObservableCollection<DataPoint> 或类似的属性，
+            // ChartView 的图表控件就可以直接绑定到 statisticData.DataPoints。
+            // 可以在这里添加其他逻辑，例如触发图表刷新等（如果绑定不是自动的）
         }
 
-        // --- Public Method to Update Chart ---
-        // --- Public Method to Update Chart ---
-        public void UpdateChart()
+        // 实现 IRecipient<PropertyChangedMessage<string>> 接口
+        // 用于接收 SourceViewModel 的字符串属性改变通知 (通过 [NotifyPropertyChangedRecipients] 自动发送)
+        public void Receive(PropertyChangedMessage<string> message)
         {
-            // --- Generate Series ---
-            var newLabelsList = new List<string>();
-            var currentSeriesDict = Series.OfType<ColumnSeries<int>>().ToDictionary(s => s.Name, s => s); // Map existing series by name
-
-
-            // Define a color palette. You can make this more sophisticated.
-            var colors = new SKColor[]
+            // 可以根据消息的 Sender 或 PropertyName 来判断是哪个属性或哪个 ViewModel 发来的
+            // 这里简单假设所有 string 属性改变都处理
+            if (message.Sender is ModbusViewModel) // 确认是 SourceViewModel 发来的
             {
-            SKColors.Blue,
-            SKColors.Red,
-            SKColors.Green,
-            SKColors.Orange,
-            SKColors.Purple,
-            SKColors.Brown,
-            SKColors.Cyan,
-            SKColors.Magenta,
-            SKColors.Lime,
-            SKColors.Pink
-                // Add more colors if you expect more elements
-            };
-
-            // Define label paint (color and font for the numbers on bars)
-            var dataLabelPaint = new SolidColorPaint(SKColors.Black); // Black text
-                                                                      // Optional: Configure font size, typeface etc.
-                                                                      // dataLabelPaint.SKTypeface = SKTypeface.FromFamilyName("Arial");
-                                                                      // dataLabelPaint.TextSize = 14;
-
-            var seriesToKeep = new List<ISeries>();
-            for (int i = 0; i < ElementNames.Count; i++)
-            {
-                string elementName = ElementNames[i];
-
-                // Check if the element name exists in the values dictionary
-                if (ElementValues.TryGetValue(elementName, out int elementValue))
+                //如果需要区分 SourceViewModel 中的不同字符串属性，可以检查 message.PropertyName
+                if (message.PropertyName == nameof(ModbusViewModel.SelectedCommunicationEntity))
                 {
-                    ColumnSeries<int> columnSeries;
-
-                    // **Check if a series with this name already exists**
-                    if (currentSeriesDict.TryGetValue(elementName, out columnSeries))
-                    {
-                        // **Reuse existing series and update its value**
-                        // Ensure Values is ObservableCollection<int> with at least one item
-                        if (columnSeries.Values is ObservableCollection<int> valuesCollection && valuesCollection.Count > 0)
-                        {
-                            // **Update the existing value in the collection**
-                            // This triggers smooth animation for the bar height
-                            valuesCollection[0] = elementValue;
-                        }
-                        else
-                        {
-                            // Should not happen if initial creation is correct, but handle as fallback
-                            // Recreate the Values collection
-                            columnSeries.Values = new ObservableCollection<int> { elementValue };
-                        }
-                    }
-                    // Create a ColumnSeries for each element
-                    else
-                    {
-                        columnSeries = new ColumnSeries<int>
-                        {
-                            Name = elementName, // Optional, good for tooltips/legends
-                                                //Values = new int[] { elementValue }, // Values for this *single* bar
-                            Values = new ObservableCollection<int> { elementValue },
-                            MaxBarWidth = 100, // **减小 MaxBarWidth，使条形更窄，从而增加相对间距** (可以调整这个值)
-                            Padding = 50, // No padding within this single-bar series group
-                                          // Assign a unique color by cycling through the palette
-                            Fill = new SolidColorPaint(colors[i % colors.Length]),
-
-                            // **启用并配置数值标签**
-                            DataLabelsPaint = dataLabelPaint, // 使用定义的标签颜色
-                            DataLabelsPosition = DataLabelsPosition.Top, // 标签显示在条形顶部
-                            DataLabelsFormatter = point => $"{point.Coordinate.PrimaryValue}"
-
-                        };
-                    }
-
-                    seriesToKeep.Add(columnSeries);
-                    newLabelsList.Add(elementName);
+                    SelectedCommunicationEntity = message.NewValue; // 更新 TargetViewModel 的属性
                 }
-                // If a name exists in ElementNames but not ElementValues, it will be skipped.
-            }
-
-            // **Update the ViewModel's Series collection using Diffing**
-            // This approach modifies the ObservableCollection<ISeries> by only adding/removing
-            // items that are different, preserving existing instances.
-
-            // Identify series instances currently in the Series collection
-            // but are NOT in the list of series we want to keep (seriesToKeep).
-            // These are the series to remove.
-            // We need to create a copy of the current Series collection to iterate while modifying it.
-            var currentSeriesList = Series.ToList();
-            var seriesToRemove = currentSeriesList.Where(s => !seriesToKeep.Contains(s)).ToList();
-
-            // Identify series instances that are in the list we want to keep (seriesToKeep)
-            // but are NOT currently in the Series collection.
-            // These are the series to add.
-            var seriesToAdd = seriesToKeep.Where(s => !currentSeriesList.Contains(s)).ToList();
-
-            // **Perform the removals from the ViewModel's Series collection**
-            foreach (var series in seriesToRemove)
-            {
-                Series.Remove(series);
-            }
-
-            // **Perform the additions to the ViewModel's Series collection**
-            // Note: The order of addition might affect the visual order on the chart
-            // for categorical axes if not carefully managed. For simple cases, adding at the end is fine.
-            foreach (var series in seriesToAdd)
-            {
-                Series.Add(series);
-            }
-
-
-            // --- Configure X-Axis ---
-            XAxes = new Axis[]
-            {
-            new Axis
-            {
-                Labels = newLabelsList.ToArray(),
-                LabelsRotation = 0, // Keep labels horizontal
-                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200)), // Light gray separators
-                SeparatorsAtCenter = false,
-                TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)), // Dark gray ticks
-                TicksAtCenter = true,
-                // Ensure all labels are shown if possible
-                ForceStepToMin = true,
-                MinStep = 1
-            }
-            };
-
-            // --- Configure Y-Axis ---
-            // Y-axis typically scales automatically, but setting MinLimit=0 is good for bar charts
-            // Setting MaxLimit is optional if you always want the 0-500 range, otherwise let it auto-scale
-            YAxes = new Axis[]
-            {
-            new Axis
-            {
-                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200)),
-                MinLimit = 0, // Start the axis at 0
-                //MaxLimit = 500 // Optional: Uncomment if you want a fixed max limit
-
-            }
-            };
-        }
-
-        // --- Handle ObservableCollection Changes (Optional) ---
-        //private void ElementNames_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        //{
-        //    // When ElementNames changes, update the chart
-        //    // This is triggered if items are added/removed from ElementNames.
-        //    // If you only change values in ElementValues, you must call UpdateChart() manually.
-        //    UpdateChart();
-        //}
-
-        // Public method to start the update loop
-        public async Task StartUpdating()
-        {
-            if (_isUpdating) return;
-            _isUpdating = true;
-            Console.WriteLine("Starting data update simulation...");
-
-            while (_isUpdating)
-            {
-                await Task.Delay(2000);
-
-                // **更新 ElementValues 中的数据**
-                foreach (string name in ElementNames) // Iterate names to ensure we only update relevant values
+                if (message.PropertyName == nameof(ModbusViewModel.ConnectButtonText))
                 {
-                    if (ElementValues.ContainsKey(name))
-                    {
-                        // Randomly change value (e.g., add/subtract)
-                        // To make values fluctuate more, you could add/subtract a random amount
-                        // Or just set a new random value within a range
-                        int change = _random.Next(0, 51); // Change between -50 and +50
-                        ElementValues[name] += change;
-
-                        // Optional: Keep values within a range if needed, though Y-axis is fixed 0-500
-                        // ElementValues[name] = Math.Max(0, ElementValues[name]); // Ensure non-negative
-                        // ElementValues[name] = Math.Min(600, ElementValues[name]); // Optional upper bound for data
-
-                    }
+                    ConnectButtonText = message.NewValue; // 更新 TargetViewModel 的属性
                 }
-
-                // **Call UpdateChart method to update the series values and notify UI**
-                // Because UpdateChart now updates the ObservableCollection<int> inside each series,
-                // LiveCharts detects the change and animates.
-                // If ElementNames changes, UpdateChart also handles adding/removing series instances.
-                UpdateChart(); // Update chart config (labels, series collection)
-
-                Console.WriteLine($"Data updated at {DateTime.Now.ToShortTimeString()}.");
             }
-
-            Console.WriteLine("Data update simulation stopped.");
         }
 
+        // 如果你的 NavigationViewModel 有 Dispose 或 Cleanup 方法，考虑在这里注销消息
+        // public override void Destroy() // 示例：Prism的Destroy
+        // {
+        //     WeakReferenceMessenger.Default.Unregister<StatisticViewModelCreatedMessage>(this);
+        //     base.Destroy();
+        // }
+
+        [ObservableProperty]
+        private bool trainingEnabled = true;
+
+        [ObservableProperty]
+        ObservableCollection<ClientItem> clientItems;
+
+        [ObservableProperty]
+        Dictionary<string, ushort> trainingPort;
+
+        [RelayCommand]
+        void TrainingBegin()
+        {
+            if (ConnectButtonText == "断开" || StatisticData != null)
+            {
+                UpdateLoading(true);
+                AppTraining.IsTraining = true;
+                ClientTraining.TrainingInit(StatisticData, ClientItems);
+                ClientTraining.GetPort(StatisticData, TrainingPort);
+                switch (SelectedCommunicationEntity)
+                {
+                    case "Sort1":
+                        _ = ClientTraining.TrainingSort1(StatisticData, ClientItems, TrainingPort, 
+                            ModbusService.Requester, ModbusService.ModbusConfig, 
+                            aggregator);
+                        break;
+                    default:
+                        break;
+                }
+                TrainingEnabled = false;
+                UpdateLoading(false);
+                aggregator.SendMessage("实训开始进行");
+            }
+            else
+            {
+                aggregator.SendMessage("通信未连接，无法开始实训");
+            }
+        }
+
+        [RelayCommand]
+        void TrainingStop()
+        {
+            UpdateLoading(true);
+            AppTraining.IsTraining = false;
+            ClientItems.Clear();
+            TrainingPort.Clear();
+            TrainingEnabled = true;
+            UpdateLoading(false);
+            aggregator.SendMessage("正在强制停止实训");
+        }
 
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AutoAPP.Core.ViewModels
 {
-    public class NavigationViewModel(IContainerProvider containerProvider) : ObservableObject, INavigationAware
+    public class NavigationViewModel(IContainerProvider containerProvider) : ObservableRecipient, INavigationAware
     {
         private readonly IContainerProvider containerProvider = containerProvider;
         public readonly IEventAggregator aggregator = containerProvider.Resolve<IEventAggregator>();

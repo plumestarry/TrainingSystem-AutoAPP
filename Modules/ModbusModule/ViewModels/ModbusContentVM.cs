@@ -1,6 +1,7 @@
 ﻿using AutoAPP.Core.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using ModbusModule.Methods;
 using ModbusModule.Models;
 using System;
@@ -148,6 +149,7 @@ namespace ModbusModule.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(LoadDataCommand))]
+        [NotifyPropertyChangedRecipients]
         private string selectedCommunicationEntity;
 
         [RelayCommand]

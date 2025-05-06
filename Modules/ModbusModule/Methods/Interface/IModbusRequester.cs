@@ -48,6 +48,10 @@ namespace ModbusModule.Methods.Interface
         /// <exception cref="InvalidOperationException">如果未连接，则抛出此异常。</exception>
         Task<ushort[]> ReadInputRegistersAsync(byte unitId, ushort startAddress, ushort numberOfPoints);
 
+        Task WriteSingleCoilAsync(byte unitId, ushort startAddress, bool values);
+
+        Task WriteSingleRegisterAsync(byte unitId, ushort startAddress, ushort value);
+
         /// <summary>
         /// 写入多个线圈 (功能码 0F)。
         /// </summary>
