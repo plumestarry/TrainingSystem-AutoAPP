@@ -22,18 +22,26 @@ namespace AutoAPI.Service
         private readonly IUnitOfWork Work = work;
         private readonly IMapper Mapper = mapper;
 
-        public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
+        public async Task<ApiResponse> GetAllAsync(string userName)
         {
             try
             {
                 var repository = Work.GetRepository<RecordEntity>();
-                var result = await repository.GetPagedListAsync(
-                   predicate: x => string.IsNullOrWhiteSpace(parameter.Search) || x.Title.Contains(parameter.Search),
-                   pageIndex: parameter.PageIndex,
-                   pageSize: parameter.PageSize,
-                   orderBy: source => source.OrderByDescending(t => t.CreateDate)
-                   );
-                return new ApiResponse(true, result);
+                if (userName == "Admin")
+                {
+                    var result = await repository.GetAllAsync(
+                        orderBy: source => source.OrderByDescending(t => t.CreateDate)
+                        );
+                    return new ApiResponse(true, result);
+                }
+                else
+                {
+                    var result = await repository.GetAllAsync(
+                        predicate: x => x.UserName == userName,
+                        orderBy: source => source.OrderByDescending(t => t.CreateDate)
+                        );
+                    return new ApiResponse(true, result);
+                }
             }
             catch (Exception ex)
             {
@@ -41,12 +49,12 @@ namespace AutoAPI.Service
             }
         }
 
-        public async Task<ApiResponse> GetSingleAsync(int id)
+        public async Task<ApiResponse> GetSingleAsync(string userName)
         {
             try
             {
                 var repository = Work.GetRepository<RecordEntity>();
-                var result = await repository.GetFirstOrDefaultAsync(predicate: x => x.Id.Equals(id));
+                var result = await repository.GetFirstOrDefaultAsync(predicate: x => x.UserName == userName);
                 return new ApiResponse(true, result);
             }
             catch (Exception ex)
@@ -125,11 +133,9 @@ namespace AutoAPI.Service
                 SummaryDto summary = new SummaryDto
                 {
                     Sum = result.Count, // 汇总实训次数
-                    CompletedCount = result.Where(t => t.Content == "1").Count() // 统计通过次数
+                    CompletedCount = result.Where(t => t.Content == "3").Count() // 统计通过次数
                 };
                 summary.CompletedRatio = (summary.CompletedCount / (double)summary.Sum).ToString("0%"); // 统计通过率
-
-                //summary.NotebookList = new ObservableCollection<RecordDto>(Mapper.Map<List<RecordDto>>(notebooks.Where(t => t.Status == 0)));
                 summary.RecordList = new ObservableCollection<RecordDto>(Mapper.Map<List<RecordDto>>(result));
 
                 return new ApiResponse(true, summary);

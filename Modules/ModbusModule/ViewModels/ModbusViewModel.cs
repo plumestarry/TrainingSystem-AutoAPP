@@ -1,4 +1,7 @@
 ﻿using AutoAPP.Core.Dialogs.Interface;
+using AutoAPP.Core.Extensions;
+using AutoAPP.Core.Service.Interface;
+using AutoShared.Dtos;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -29,7 +32,9 @@ namespace ModbusModule.ViewModels
 
         private readonly IModbusTcp ModbusService;
 
-        public ModbusViewModel(IModbusTcp ModbusService, IContainerProvider containerProvider, IDialogHostService dialog) : base(containerProvider)
+        private readonly IConfigService service;
+
+        public ModbusViewModel(IModbusTcp ModbusService, IConfigService service, IContainerProvider containerProvider, IDialogHostService dialog) : base(containerProvider)
         {
 
             this.dialog = dialog;
@@ -38,6 +43,7 @@ namespace ModbusModule.ViewModels
             ModbusTimes = new ModbusTimes();
 
             this.ModbusService = ModbusService;
+            this.service = service;
 
             LogMessage = new LogMessage(ConnectionString);
             LogMessage.AppendLogMessage("初始化完成！");
@@ -87,6 +93,7 @@ namespace ModbusModule.ViewModels
         [RelayCommand]
         async Task Config()
         {
+            await GetConfig();
             DialogParameters param = new DialogParameters();
             if (ModbusConfig != null)
                 param.Add("Value", ModbusConfig);
@@ -94,38 +101,75 @@ namespace ModbusModule.ViewModels
             var dialogResult = await dialog.ShowDialog("ConnectView", param);
             if (dialogResult.Result == ButtonResult.OK)
             {
-                try
-                {
-                    UpdateLoading(true);
-                    ModbusConfig = dialogResult.Parameters.GetValue<ModbusConfig>("Value");
+                ModbusConfig = dialogResult.Parameters.GetValue<ModbusConfig>("Value");
+                await UpdateConfig();
+                LogMessage.AppendLogMessage("ModbusConfig 配置成功！");
+            }
+        }
 
-                    //if (memo.Id > 0)
-                    //{
-                    //    var updateResult = await memoService.UpdateAsync(memo);
-                    //    if (updateResult.Status)
-                    //    {
-                    //        var memoModel = summary.MemoList.FirstOrDefault(t => t.Id.Equals(memo.Id));
-                    //        if (memoModel != null)
-                    //        {
-                    //            memoModel.Title = memo.Title;
-                    //            memoModel.Content = memo.Content;
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    var addResult = await memoService.AddAsync(memo);
-                    //    if (addResult.Status)
-                    //    {
-                    //        summary.MemoList.Add(addResult.Result);
-                    //    }
-                    //}
-                    LogMessage.AppendLogMessage("ModbusConfig 配置成功！");
-                }
-                finally
+        async Task GetConfig()
+        {
+            if (AppSession.UserName == "Guest")
+                return;
+            try
+            {
+                UpdateLoading(true);
+                var configResult = await service.GetFirstOfDefaultAsync(AppSession.UserName);
+                if (configResult.Status)
                 {
-                    UpdateLoading(false);
+                    if (configResult.Result != null)
+                    {
+                        ModbusConfig.IPAddress = configResult.Result.IPAddress;
+                        ModbusConfig.Port = configResult.Result.Port;
+                        ModbusConfig.SlaveID = configResult.Result.SlaveID;
+                    }
+                    else
+                    {
+                        await service.AddAsync(new ConfigDto()
+                        {
+                            UserName = AppSession.UserName,
+                            IPAddress = ModbusConfig.IPAddress,
+                            Port = ModbusConfig.Port,
+                            SlaveID = ModbusConfig.SlaveID,
+                            CreateDate = DateTime.Now,
+                        });
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                UpdateLoading(false);
+                aggregator.SendMessage("获取配置错误！");
+            }
+            finally
+            {
+                UpdateLoading(false);
+            }
+        }
+
+        async Task UpdateConfig()
+        {
+            if (AppSession.UserName == "Guest")
+                return;
+            try
+            {
+                UpdateLoading(true);
+                await service.UpdateAsync(new ConfigDto()
+                {
+                    UserName = AppSession.UserName,
+                    IPAddress = ModbusConfig.IPAddress,
+                    Port = ModbusConfig.Port,
+                    SlaveID = ModbusConfig.SlaveID,
+                });
+            }
+            catch (Exception)
+            {
+                UpdateLoading(false);
+                aggregator.SendMessage("更新配置错误！");
+            }
+            finally
+            {
+                UpdateLoading(false);
             }
         }
 

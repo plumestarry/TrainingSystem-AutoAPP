@@ -11,14 +11,9 @@ namespace AutoShared.Dtos
     /// </summary>
     public class ConfigDto : BaseDto
     {
-        private string title;
         private string ipAddress;
-        private string ioDefinitions;
-        public string Title
-        {
-            get { return title; }
-            set { title = value; OnPropertyChanged(); }
-        }
+        private ushort port;
+        private byte slaveID;
 
         public string IPAddress
         {
@@ -26,10 +21,16 @@ namespace AutoShared.Dtos
             set { ipAddress = value; OnPropertyChanged(); }
         }
 
-        public string IODefinitions
+        public ushort Port
         {
-            get { return ioDefinitions; }
-            set { ioDefinitions = value; OnPropertyChanged(); }
+            get { return port; }
+            set { port = value; OnPropertyChanged(); }
+        }
+
+        public byte SlaveID
+        {
+            get { return slaveID; }
+            set { slaveID = value; OnPropertyChanged(); }
         }
     }
 }

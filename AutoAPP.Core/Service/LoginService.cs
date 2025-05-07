@@ -32,5 +32,13 @@ namespace AutoAPP.Core.Service
             request.Parameter = user;
             return await client.ExecuteAsync(request);
         }
+
+        public async Task<ApiResponse<List<string>>> GetAllAsync()
+        {
+            BaseRequest request = new BaseRequest();
+            request.Method = RestSharp.Method.Get;
+            request.Route = $"api/{serviceName}/GetAll";
+            return await client.ExecuteAsync<List<string>>(request);
+        }
     }
 }

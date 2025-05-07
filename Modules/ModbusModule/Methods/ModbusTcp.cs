@@ -371,7 +371,8 @@ namespace ModbusModule.Methods
                             {
                                 // 处理 Modbus 读取过程中的异常（例如：超时，从站无响应，协议错误等）
                                 // 这类异常通常不应导致整个连接断开，而是记录错误并继续轮询下一个点或下一个轮询周期
-                                LogMessage.AppendLogMessage($"Modbus read error for {dataTypeKey} at address {startAddress} (SlaveID {configs.SlaveID}): {modbusReadEx.Message}");
+                                LogMessage.AppendLogMessage($"Modbus 读取错误，请断开重新连接: {modbusReadEx.Message}");
+                                await Task.Delay(options.WriteTimeoutMs, cancellationToken).ConfigureAwait(false);
                                 // 触发 ErrorOccurred 事件 (可选，取决于你想如何处理单点/单范围读取错误)
                                 // ErrorOccurred?.Invoke(this, new Exception($"Modbus read error for {dataTypeKey} at address {startAddress}.", modbusReadEx));
                             }

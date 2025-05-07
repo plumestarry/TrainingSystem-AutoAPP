@@ -1,5 +1,6 @@
 ﻿using AutoAPP.Core.Dialogs.Interface;
 using AutoAPP.Core.Extensions;
+using AutoAPP.Core.Service.Interface;
 using AutoAPP.Core.ViewModels;
 using ChartModule.Methods;
 using ChartModule.Models;
@@ -29,14 +30,17 @@ namespace ChartModule.ViewModels
     {
         public IModbusTcp ModbusService { get; set; }
 
+        private readonly IRecordService service;
+
         // 在构造函数中注册消息监听器
-        public ChartViewModel(IContainerProvider containerProvider) : base(containerProvider)
+        public ChartViewModel(IRecordService service, IContainerProvider containerProvider) : base(containerProvider)
         {
             // 注册监听 StatisticViewModelCreatedMessage 消息
             WeakReferenceMessenger.Default.Register<CreatedMessage>(this);
             WeakReferenceMessenger.Default.Register<PropertyChangedMessage<string>>(this);
             ClientItems = new ObservableCollection<ClientItem>();
             TrainingPort = new Dictionary<string, ushort>();
+            this.service = service;
 
             // 注意：WeakReferenceMessenger 使用弱引用，通常不需要手动注销
             // 但如果你的 ViewModel 生命周期复杂，或者有很多订阅，可以考虑在 Dispose 或 OnNavigatedFrom 中注销
@@ -117,7 +121,9 @@ namespace ChartModule.ViewModels
                     case "Sort1":
                         _ = ClientTraining.TrainingSort1(StatisticData, ClientItems, TrainingPort, 
                             ModbusService.Requester, ModbusService.ModbusConfig, 
-                            aggregator);
+                            aggregator, service, "Sort1");
+                        break;
+                    case "Sort2":
                         break;
                     default:
                         break;

@@ -14,7 +14,7 @@ namespace ModbusModule.Models
         string? iPAddress;
 
         [ObservableProperty]
-        int port;
+        ushort port;
 
         [ObservableProperty]
         byte slaveID;

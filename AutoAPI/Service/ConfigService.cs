@@ -21,17 +21,15 @@ namespace AutoAPI.Service
         private readonly IUnitOfWork Work = work;
         private readonly IMapper Mapper = mapper;
 
-        public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
+        public async Task<ApiResponse> GetAllAsync(string userName)
         {
             try
             {
                 var repository = Work.GetRepository<ConfigEntity>();
-                var result = await repository.GetPagedListAsync(
-                   predicate: x => string.IsNullOrWhiteSpace(parameter.Search) || x.Title.Contains(parameter.Search),
-                   pageIndex: parameter.PageIndex,
-                   pageSize: parameter.PageSize,
-                   orderBy: source => source.OrderByDescending(t => t.CreateDate)
-                   );
+                var result = await repository.GetAllAsync(
+                    predicate: x => x.UserName == userName,
+                    orderBy: source => source.OrderByDescending(t => t.CreateDate)
+                    );
                 return new ApiResponse(true, result);
             }
             catch (Exception ex)
@@ -40,12 +38,12 @@ namespace AutoAPI.Service
             }
         }
 
-        public async Task<ApiResponse> GetSingleAsync(int id)
+        public async Task<ApiResponse> GetSingleAsync(string userName)
         {
             try
             {
                 var repository = Work.GetRepository<ConfigEntity>();
-                var result = await repository.GetFirstOrDefaultAsync(predicate: x => x.Id.Equals(id));
+                var result = await repository.GetFirstOrDefaultAsync(predicate: x => x.UserName == userName);
                 return new ApiResponse(true, result);
             }
             catch (Exception ex)
@@ -60,11 +58,11 @@ namespace AutoAPI.Service
             {
                 var updateData = Mapper.Map<ConfigEntity>(model);
                 var repository = Work.GetRepository<ConfigEntity>();
-                var result = await repository.GetFirstOrDefaultAsync(predicate: x => x.Id.Equals(updateData.Id));
+                var result = await repository.GetFirstOrDefaultAsync(predicate: x => x.UserName.Equals(updateData.UserName));
 
-                result.Title = updateData.Title;
                 result.IPAddress = updateData.IPAddress;
-                result.IODefinitions = updateData.IODefinitions;
+                result.Port = updateData.Port;
+                result.SlaveID = updateData.SlaveID;
                 result.UpdateDate = DateTime.Now;
 
                 repository.Update(result);

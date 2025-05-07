@@ -34,21 +34,19 @@ namespace AutoAPP.Core.Service
             return await client.ExecuteAsync(request);
         }
 
-        public async Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter)
+        public async Task<ApiResponse<List<TEntity>>> GetAllAsync(string userName)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Get;
-            request.Route = $"api/{serviceName}/GetAll?pageIndex={parameter.PageIndex}" +
-                $"&pageSize={parameter.PageSize}" +
-                $"&search={parameter.Search}";
-            return await client.ExecuteAsync<PagedList<TEntity>>(request);
+            request.Route = $"api/{serviceName}/GetAll?userName={userName}";
+            return await client.ExecuteAsync<List<TEntity>>(request);
         }
 
-        public async Task<ApiResponse<TEntity>> GetFirstOfDefaultAsync(int id)
+        public async Task<ApiResponse<TEntity>> GetFirstOfDefaultAsync(string userName)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Get;
-            request.Route = $"api/{serviceName}/Get?id={id}";
+            request.Route = $"api/{serviceName}/Get?userName={userName}";
             return await client.ExecuteAsync<TEntity>(request);
         }
 

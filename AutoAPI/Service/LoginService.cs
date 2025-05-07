@@ -71,5 +71,21 @@ namespace AutoAPI.Service
                 return new ApiResponse("注册账号失败！");
             }
         }
+
+        public async Task<ApiResponse> GetAllAsync()
+        {
+            try
+            {
+                var repository = Work.GetRepository<UserEntity>();
+                var result = await repository.GetAllAsync(
+                    orderBy: source => source.OrderByDescending(t => t.CreateDate)
+                    );
+                return new ApiResponse(true, result.Select(t => t.UserName).ToList());
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse(ex.Message);
+            }
+        }
     }
 }

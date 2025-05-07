@@ -15,14 +15,12 @@ namespace AutoAPP.Core.Service
     {
         private readonly HttpRestClient client = client;
 
-        public async Task<ApiResponse<PagedList<RecordDto>>> GetAllFilterAsync(QueryParameter parameter)
+        public async Task<ApiResponse<List<RecordDto>>> GetAllFilterAsync(string userName)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.Get;
-            request.Route = $"api/Record/GetAll?pageIndex={parameter.PageIndex}" +
-                $"&pageSize={parameter.PageSize}" +
-                $"&search={parameter.Search}";
-            return await client.ExecuteAsync<PagedList<RecordDto>>(request);
+            request.Route = $"api/Record/GetAll?userName={userName}";
+            return await client.ExecuteAsync<List<RecordDto>>(request);
         }
 
         public async Task<ApiResponse<SummaryDto>> SummaryAsync()

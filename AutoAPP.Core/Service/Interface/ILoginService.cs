@@ -13,5 +13,7 @@ namespace AutoAPP.Core.Service.Interface
         Task<ApiResponse<UserDto>> Login(UserDto user);
 
         Task<ApiResponse> Register(UserDto user);
+
+        Task<ApiResponse<List<string>>> GetAllAsync();
     }
 }

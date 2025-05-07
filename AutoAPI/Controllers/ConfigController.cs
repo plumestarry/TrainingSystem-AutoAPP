@@ -21,10 +21,10 @@ namespace AutoAPI.Controllers
         private readonly IConfigService service = service;
 
         [HttpGet]
-        public async Task<ApiResponse> Get(int id) => await service.GetSingleAsync(id);
+        public async Task<ApiResponse> Get(string userName) => await service.GetSingleAsync(userName);
 
         [HttpGet]
-        public async Task<ApiResponse> GetAll([FromQuery] QueryParameter param) => await service.GetAllAsync(param);
+        public async Task<ApiResponse> GetAll(string userName) => await service.GetAllAsync(userName);
 
         [HttpPost]
         public async Task<ApiResponse> Add([FromBody] ConfigDto model) => await service.AddAsync(model);

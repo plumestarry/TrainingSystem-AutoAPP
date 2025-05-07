@@ -18,6 +18,7 @@ using ModbusModule;
 using ChartModule;
 using ModbusModule.ViewModels;
 using ModbusModule.Views;
+using RecordModule;
 
 namespace AutoAPP;
 
@@ -43,6 +44,7 @@ public partial class App : PrismApplication
         moduleCatalog.AddModule<AboutModuleConfigure>();
         moduleCatalog.AddModule<ModbusModuleConfigure>();
         moduleCatalog.AddModule<ChartModuleConfigure>();
+        moduleCatalog.AddModule<RecordModuleConfigure>();
     }
 
     protected override void ConfigureRegionAdapterMappings(RegionAdapterMappings regionAdapterMappings)

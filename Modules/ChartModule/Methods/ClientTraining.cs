@@ -1,4 +1,5 @@
 ﻿using AutoAPP.Core.Extensions;
+using AutoAPP.Core.Service.Interface;
 using ChartModule.Models;
 using LiveChartsCore.SkiaSharpView.Painting.ImageFilters;
 using ModbusModule.Methods.Interface;
@@ -60,12 +61,12 @@ namespace ChartModule.Methods
 
         public static async Task TrainingSort1(StatisticViewModel StatisticData, ObservableCollection<ClientItem> ClientItems,
             Dictionary<string, ushort> TrainingPort, IModbusRequester Requester, ModbusConfig ModbusConfig,
-            IEventAggregator aggregator)
+            IEventAggregator aggregator, IRecordService service, string title)
         {
             // 使用一个 Random 实例，避免快速连续创建导致随机性不足
             var random = new Random();
 
-            var numOfTraining = 0;
+            var numOfTraining = 1;
 
             // 定义需要发送的数据值
             ushort[] dataValues = { 0x0020, 0x0100, 0x0800, 0x0010, 0x0080, 0x0400 };
@@ -158,45 +159,44 @@ namespace ChartModule.Methods
 
                 var ifPassed = greenItem.ItemValue == greenRegister.Status && blueItem.ItemValue == blueRegister.Status;
 
-                if (numOfTraining == 0)
+                if (ifPassed)
                 {
-                    if (ifPassed)
+                    aggregator.SendMessage($"第{numOfTraining}轮实训完成");
+                    if (numOfTraining == 3)
                     {
-                        aggregator.SendMessage("第一轮实训完成");
-                    }
-                    else
-                    {
-                        aggregator.SendMessage("第一轮实训失败，请停止实训");
+                        await UploadGrade(aggregator, service, title, numOfTraining.ToString());
                         return;
                     }
                 }
-                else if (numOfTraining == 1)
+                else
                 {
-                    if (ifPassed)
-                    {
-                        aggregator.SendMessage("第二轮实训完成");
-                    }
-                    else
-                    {
-                        aggregator.SendMessage("第二轮实训失败，请停止实训");
-                        return;
-                    }
-                }
-                else if (numOfTraining == 2)
-                {
-                    if (ifPassed)
-                    {
-                        aggregator.SendMessage("第三轮实训完成，实训通过");
-
-                    }
-                    else
-                    {
-                        aggregator.SendMessage("第三轮实训失败，请停止实训");
-                        return;
-                    }
+                    aggregator.SendMessage($"第{numOfTraining}轮实训失败，请停止实训");
+                    await UploadGrade(aggregator, service, title, numOfTraining.ToString());
+                    return;
                 }
 
-                numOfTraining++;
+                numOfTraining ++;
+            }
+        }
+
+        public static async Task UploadGrade(IEventAggregator aggregator, IRecordService service, string title, string content)
+        {
+            if (AppSession.UserName == "Guest")
+                return;
+            try
+            {
+                await service.AddAsync(new AutoShared.Dtos.RecordDto()
+                {
+                    UserName = AppSession.UserName,
+                    Title = title,
+                    Content = content,
+                    CreateDate = DateTime.Now,
+                });
+                aggregator.SendMessage($"正在上传实训记录");
+            }
+            catch (Exception)
+            {
+                aggregator.SendMessage($"实训记录上传失败");
             }
         }
     }

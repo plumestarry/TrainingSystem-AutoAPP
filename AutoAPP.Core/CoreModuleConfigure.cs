@@ -25,6 +25,8 @@ namespace AutoAPP.Core
             containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl"));
             containerRegistry.GetContainer().RegisterInstance(@"http://localhost:5140/", serviceKey: "webUrl");
 
+            containerRegistry.Register<IRecordService, RecordService>();
+            containerRegistry.Register<IConfigService, ConfigService>();
             containerRegistry.Register<IDialogHostService, DialogHostService>();
 
             containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();

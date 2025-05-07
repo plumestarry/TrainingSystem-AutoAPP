@@ -8,5 +8,7 @@ namespace AutoAPI.Service.Interface
         Task<ApiResponse> LoginAsync(string Account, string Password);
 
         Task<ApiResponse> Register(UserDto user);
+
+        Task<ApiResponse> GetAllAsync();
     }
 }

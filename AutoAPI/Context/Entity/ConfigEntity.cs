@@ -2,10 +2,10 @@
 {
     public class ConfigEntity : BaseEntity
     {
-        public string Title { get; set; }
-
         public string IPAddress { get; set; }
 
-        public string IODefinitions { get; set; }
+        public string Port { get; set; }
+
+        public string SlaveID { get; set; }
     }
 }

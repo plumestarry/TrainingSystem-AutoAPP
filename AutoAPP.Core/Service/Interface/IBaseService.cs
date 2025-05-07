@@ -11,9 +11,9 @@ namespace AutoAPP.Core.Service.Interface
 {
     public interface IBaseService<TEntity> where TEntity : class
     {
-        Task<ApiResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter);
+        Task<ApiResponse<List<TEntity>>> GetAllAsync(string userName);
 
-        Task<ApiResponse<TEntity>> GetFirstOfDefaultAsync(int id);
+        Task<ApiResponse<TEntity>> GetFirstOfDefaultAsync(string userName);
 
         Task<ApiResponse<TEntity>> AddAsync(TEntity entity);
 

@@ -5,9 +5,9 @@ namespace AutoAPI.Service.Interface
 {
     public interface IBaseService<T>
     {
-        Task<ApiResponse> GetAllAsync(QueryParameter query);
+        Task<ApiResponse> GetAllAsync(string userName);
 
-        Task<ApiResponse> GetSingleAsync(int id);
+        Task<ApiResponse> GetSingleAsync(string userName);
 
         Task<ApiResponse> AddAsync(T model);
 

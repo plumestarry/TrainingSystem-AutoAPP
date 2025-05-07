@@ -11,7 +11,7 @@ namespace AutoAPP.Core.Service.Interface
 {
     public interface IRecordService : IBaseService<RecordDto>
     {
-        Task<ApiResponse<PagedList<RecordDto>>> GetAllFilterAsync(QueryParameter parameter);
+        Task<ApiResponse<List<RecordDto>>> GetAllFilterAsync(string userName);
 
         Task<ApiResponse<SummaryDto>> SummaryAsync();
     }

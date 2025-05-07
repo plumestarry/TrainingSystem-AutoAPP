@@ -26,5 +26,8 @@ namespace AutoAPI.Controllers
         [HttpPost]
         public async Task<ApiResponse> Register([FromBody] UserDto param) => await service.Register(param);
 
+        [HttpGet]
+        public async Task<ApiResponse> GetAll() => await service.GetAllAsync();
+
     }
 }

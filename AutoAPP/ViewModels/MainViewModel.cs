@@ -12,6 +12,8 @@ namespace AutoAPP.ViewModels
 {
     public partial class MainViewModel : ObservableObject, IConfigureService
     {
+        private readonly IRecordService recordService;
+        private readonly IConfigService configService;
 
         private readonly IContainerProvider containerProvider;
         private readonly IRegionManager regionManager;
@@ -19,6 +21,8 @@ namespace AutoAPP.ViewModels
         public MainViewModel(IContainerProvider containerProvider, IRegionManager regionManager)
         {
             MenuBars = new ObservableCollection<MenuBar>();
+            this.recordService = containerProvider.Resolve<IRecordService>();
+            this.configService = containerProvider.Resolve<IConfigService>();
             this.containerProvider = containerProvider;
             this.regionManager = regionManager;
         }
@@ -77,6 +81,7 @@ namespace AutoAPP.ViewModels
         void CreateMenuBar()
         {
             MenuBars?.Add(new MenuBar() { Icon = "InformationOutline", Title = "关于本平台", NameSpace = "AboutView" });
+            MenuBars?.Add(new MenuBar() { Icon = "TextBoxSearchOutline", Title = "Record", NameSpace = "RecordView" });
             MenuBars?.Add(new MenuBar() { Icon = "ChartBar", Title = "Chart", NameSpace = "ChartView" });
             MenuBars?.Add(new MenuBar() { Icon = "AccessPointNetwork", Title = "Modbus", NameSpace = "ModbusView" });
             
