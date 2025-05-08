@@ -116,25 +116,32 @@
             </Style>
 
             <!--  窗口样式  -->
-            <Style TargetType="Window">
-                <Setter Property="AllowsTransparency" Value="True" />
+            <Style TargetType="{x:Type Window}">
                 <Setter Property="WindowStyle" Value="None" />
-                <Setter Property="Background" Value="White" />
+                <Setter Property="AllowsTransparency" Value="True" />
+                <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="Window">
-                            <Grid>
-                                <Border Background="{TemplateBinding Background}" CornerRadius="15">
-                                    <AdornerDecorator>
-                                        <ContentPresenter />
-                                    </AdornerDecorator>
+                        <ControlTemplate TargetType="{x:Type Window}">
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="15">
+                                <Border
+                                    Padding="{TemplateBinding Padding}"
+                                    Background="White"
+                                    CornerRadius="15">
+                                    <ContentPresenter x:Name="PART_ClientArea" Content="{TemplateBinding Content}" />
                                 </Border>
-                            </Grid>
+                            </Border>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Background" Value="White" />
+                <Setter Property="BorderBrush" Value="Gray" />
+                <Setter Property="BorderThickness" Value="1" />
             </Style>
-
 
         </ResourceDictionary>
     </Application.Resources>

@@ -124,6 +124,9 @@ namespace ChartModule.ViewModels
                             aggregator, service, "Sort1");
                         break;
                     case "Sort2":
+                        _ = ClientTraining.TrainingSort2(StatisticData, ClientItems, TrainingPort,
+                           ModbusService.Requester, ModbusService.ModbusConfig,
+                           aggregator, service, "Sort2");
                         break;
                     default:
                         break;

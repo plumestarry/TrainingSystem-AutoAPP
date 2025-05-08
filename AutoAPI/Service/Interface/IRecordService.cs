@@ -5,6 +5,6 @@ namespace AutoAPI.Service.Interface
 {
     public interface IRecordService : IBaseService<RecordDto>
     {
-        Task<ApiResponse> Summary();
+        Task<ApiResponse> Summary(string userName);
     }
 }

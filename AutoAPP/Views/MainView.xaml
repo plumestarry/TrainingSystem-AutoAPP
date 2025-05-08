@@ -16,7 +16,7 @@
     d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     AllowsTransparency="True"
-    Background="{DynamicResource MaterialDesignPaper}"
+    Background="Transparent"
     FontFamily="微软雅黑"
     TextElement.FontSize="16"
     TextElement.FontWeight="Regular"
@@ -26,7 +26,13 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Grid>
+
+    <Grid materialDesign:ElevationAssist.Elevation="Dp12">
+        <Rectangle
+            Fill="{DynamicResource MaterialDesignPaper}"
+            IsHitTestVisible="False"
+            RadiusX="12"
+            RadiusY="12" />
         <materialDesign:DialogHost
             x:Name="DialogHost"
             DialogTheme="Inherit"
@@ -50,7 +56,9 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         materialDesign:ElevationAssist.Elevation="Dp2"
+                        CornerRadius="12,0,0,12"
                         Mode="PrimaryMid">
+
                         <Grid>
 
                             <Grid.RowDefinitions>
@@ -59,6 +67,7 @@
                                 <RowDefinition Height="1" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
+
 
                             <StackPanel>
                                 <materialDesign:PopupBox Margin="0,10">
@@ -78,7 +87,6 @@
                                         </Border>
                                     </materialDesign:PopupBox.ToggleContent>
 
-
                                     <StackPanel>
                                         <Button Command="{Binding LoginOutCommand}" Content="注销当前账户" />
                                     </StackPanel>
@@ -90,7 +98,6 @@
                                     FontSize="16"
                                     Foreground="White"
                                     Text="{Binding UserName}" />
-
                             </StackPanel>
 
                             <DockPanel
@@ -129,7 +136,6 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-
                             </DockPanel>
 
                             <Border
@@ -148,19 +154,17 @@
                                     DockPanel.Dock="Bottom"
                                     Foreground="White"
                                     Style="{StaticResource IconOnlyPaddedAreaButtonStyle}"
-                                    ToolTip="主页">
+                                    ToolTip="实训主页">
                                     <materialDesign:PackIcon
                                         Width="36"
                                         Height="36"
                                         Kind="Home" />
                                 </Button>
                             </DockPanel>
-
                         </Grid>
                     </materialDesign:ColorZone>
 
                     <ContentControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}" />
-
                 </Grid>
 
                 <!--  定义一个标题栏区域  -->
@@ -201,9 +205,7 @@
                     VerticalAlignment="Bottom"
                     Panel.ZIndex="1"
                     MessageQueue="{materialDesign:MessageQueue}" />
-
             </Grid>
-
         </materialDesign:DialogHost>
     </Grid>
 </Window>

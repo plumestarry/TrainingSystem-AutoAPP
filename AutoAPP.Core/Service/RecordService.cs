@@ -23,10 +23,11 @@ namespace AutoAPP.Core.Service
             return await client.ExecuteAsync<List<RecordDto>>(request);
         }
 
-        public async Task<ApiResponse<SummaryDto>> SummaryAsync()
+        public async Task<ApiResponse<SummaryDto>> SummaryAsync(string userName)
         {
             BaseRequest request = new BaseRequest();
-            request.Route = "api/Record/Summary";
+            request.Method = RestSharp.Method.Get;
+            request.Route = $"api/Record/Summary?userName={userName}";
             return await client.ExecuteAsync<SummaryDto>(request);
         }
     }

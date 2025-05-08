@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Models\Content.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AutoAPP.Core\AutoAPP.Core.csproj" />
     <ProjectReference Include="..\Modules\AboutModule\AboutModule.csproj" />
     <ProjectReference Include="..\Modules\ChartModule\ChartModule.csproj" />
@@ -27,6 +31,9 @@
 
   <ItemGroup>
     <Resource Include="Images\User.png" />
+    <Resource Include="Models\Content.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

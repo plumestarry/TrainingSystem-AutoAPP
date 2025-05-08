@@ -10,72 +10,200 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:viewmodels="clr-namespace:AutoAPP.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:IndexViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
     <Grid Margin="16">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" Margin="0,0,16,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <StackPanel
-                Grid.Row="0"
-                Margin="16"
-                HorizontalAlignment="Left"
+        <Border
+            Grid.Row="0"
+            Margin="0,32,0,16"
+            Padding="16"
+            Background="Transparent"
+            BorderBrush="{DynamicResource MaterialDesignDivider}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <TextBlock
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Orientation="Vertical">
-                <md:PackIcon
-                    Width="48"
-                    Height="48"
-                    Margin="0,0,0,8"
-                    Foreground="{DynamicResource PrimaryHueMidBrush}"
-                    Kind="HomeAnalytics" />
-                <TextBlock
-                    Margin="0,0,0,8"
-                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                    Text="{Binding WelcomeMessage}"
-                    TextWrapping="Wrap" />
-                <TextBlock
-                    x:Name="TimeTextBlock"
-                    Foreground="{DynamicResource MaterialDesignBodyLight}"
-                    Style="{StaticResource MaterialDesignBody1TextBlock}"
-                    Text="{Binding CurrentTimeText, Mode=OneWay}" />
-            </StackPanel>
+                FontSize="24"
+                Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                Text="{Binding Title}" />
+        </Border>
 
-            <lvc:PieChart
-                Grid.Row="1"
-                Margin="16"
-                LegendPosition="Bottom"
-                Series="{Binding PieChartSeries}" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Margin="0,0,16,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <md:Card
+                    Grid.Row="0"
+                    Width="256"
+                    Margin="0,0,0,16"
+                    Background="#66CCFF"
+                    Foreground="White">
+                    <StackPanel
+                        Grid.Row="0"
+                        Margin="16"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                        <md:PackIcon
+                            Width="48"
+                            Height="48"
+                            Margin="0,0,0,8"
+                            Kind="ClockOutline" />
+                        <TextBlock
+                            Margin="0,0,0,8"
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                            Text="当前时间"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            x:Name="TimeTextBlock1"
+                            Style="{StaticResource MaterialDesignBody1TextBlock}"
+                            Text="{Binding Now, StringFormat={}{0:yyyy年MM月dd日 dddd}}" />
+                        <TextBlock
+                            x:Name="TimeTextBlock2"
+                            Style="{StaticResource MaterialDesignBody1TextBlock}"
+                            Text="{Binding Now, StringFormat={}{0:HH:mm:ss}}" />
+                    </StackPanel>
+                </md:Card>
+
+                <md:Card
+                    Grid.Row="1"
+                    Width="256"
+                    Margin="0,0,0,16"
+                    Padding="0"
+                    Background="#9999FF"
+                    Foreground="White">
+                    <StackPanel
+                        Grid.Row="0"
+                        Margin="16"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                        <md:PackIcon
+                            Width="48"
+                            Height="48"
+                            Margin="0,0,0,8"
+                            Kind="ChartDonutVariant" />
+                        <TextBlock
+                            Margin="0,0,0,8"
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                            Text="实训通过比例"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            FontSize="32"
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                            Text="{Binding CompletedRatio}" />
+                    </StackPanel>
+                </md:Card>
+
+                <md:Card
+                    Grid.Row="2"
+                    Width="256"
+                    Background="#39C5BB"
+                    Foreground="White">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Row="0"
+                            Margin="16,16,0,0"
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                            Text="通过次数统计"
+                            TextWrapping="Wrap" />
+                        <lvc:PieChart
+                            Grid.Row="1"
+                            LegendPosition="Right"
+                            Series="{Binding Series}" />
+                    </Grid>
+                </md:Card>
+
+            </Grid>
+
+            <Border
+                Grid.Row="0"
+                Grid.Column="1"
+                Padding="16"
+                Background="Transparent"
+                BorderBrush="{DynamicResource MaterialDesignDivider}"
+                BorderThickness="1"
+                CornerRadius="8">
+                <ScrollViewer
+                    md:ScrollViewerAssist.IsAutoHideEnabled="True"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Disabled">
+
+                    <ItemsControl ItemsSource="{Binding InfoCards}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Width="320" Margin="16">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <md:Card
+                                        Grid.Row="0"
+                                        Background="MediumSeaGreen"
+                                        Foreground="White">
+                                        <TextBlock
+                                            Margin="8"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontWeight="Bold"
+                                            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                            Text="{Binding Header}"
+                                            TextWrapping="Wrap" />
+                                    </md:Card>
+                                    <ScrollViewer
+                                        Grid.Row="1"
+                                        md:ScrollViewerAssist.IsAutoHideEnabled="True"
+                                        HorizontalScrollBarVisibility="Disabled"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <TextBox
+                                            Margin="4,8"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            IsReadOnly="True"
+                                            Style="{StaticResource MaterialDesignComboBoxEditableTextBox}"
+                                            Text="{Binding Content}"
+                                            TextWrapping="Wrap" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </ScrollViewer>
+            </Border>
 
         </Grid>
-
-        <ScrollViewer
-            Grid.Column="1"
-            md:ScrollViewerAssist.IsAutoHideEnabled="True"
-            HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Disabled">
-
-            <ItemsControl ItemsSource="{Binding InfoCards}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate />
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
     </Grid>
-
 </UserControl>

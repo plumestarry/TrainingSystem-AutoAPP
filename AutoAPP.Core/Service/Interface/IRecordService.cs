@@ -13,6 +13,6 @@ namespace AutoAPP.Core.Service.Interface
     {
         Task<ApiResponse<List<RecordDto>>> GetAllFilterAsync(string userName);
 
-        Task<ApiResponse<SummaryDto>> SummaryAsync();
+        Task<ApiResponse<SummaryDto>> SummaryAsync(string userName);
     }
 }

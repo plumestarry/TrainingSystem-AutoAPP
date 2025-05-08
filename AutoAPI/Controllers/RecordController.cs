@@ -27,7 +27,7 @@ namespace AutoAPI.Controllers
         public async Task<ApiResponse> GetAll(string userName) => await service.GetAllAsync(userName);
 
         [HttpGet]
-        public async Task<ApiResponse> Summary() => await service.Summary();
+        public async Task<ApiResponse> Summary(string userName) => await service.Summary(userName);
 
         [HttpPost]
         public async Task<ApiResponse> Add([FromBody] RecordDto model) => await service.AddAsync(model);

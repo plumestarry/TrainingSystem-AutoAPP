@@ -9,28 +9,35 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <StackPanel
-        Margin="20"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Orientation="Vertical">
+    <Grid Margin="32">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
         <TextBlock
-            Margin="0,0,0,32"
+            Grid.Row="0"
+            Margin="16"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Style="{StaticResource MaterialDesignHeadline4TextBlock}"
             Text="关于分拣实训系统" />
 
         <TextBlock
+            Grid.Row="1"
             MaxWidth="480"
-            Margin="0,0,0,32"
+            Margin="16"
             Style="{StaticResource MaterialDesignBody1TextBlock}"
-            Text="这里是关于您的项目的一些简要介绍。您可以写明项目的功能、目标用户、核心理念或者任何您觉得重要的信息。请替换此文本。"
+            Text="本项目用于毕业设计"
             TextAlignment="Center"
             TextWrapping="Wrap" />
 
         <StackPanel
-            Margin="0,0,0,32"
+            Grid.Row="2"
+            Margin="16"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <TextBlock
@@ -41,6 +48,7 @@
             <Border
                 Margin="8,0,0,0"
                 Padding="8,8"
+                VerticalAlignment="Center"
                 BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                 BorderThickness="1"
                 CornerRadius="8">
@@ -60,11 +68,13 @@
         </StackPanel>
 
         <TextBlock
-            Margin="0,0,0,0"
+            Grid.Row="3"
+            Margin="16"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Foreground="{DynamicResource PrimaryHueMidBrush}"
             Style="{StaticResource MaterialDesignBody1TextBlock}"
             Text="By：Plumestarry" />
-    </StackPanel>
+    </Grid>
 
 </UserControl>

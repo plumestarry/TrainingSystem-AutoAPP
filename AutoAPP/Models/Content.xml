@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<InfoCards>
+	<InfoCard>
+		<Header>软件说明</Header>
+		<Content>本软件主要分为通信配置、实训统计、实训记录三个模块...</Content>
+	</InfoCard>
+	<InfoCard>
+		<Header>Sort1 分拣实训1</Header>
+		<Content>请按照要求进行操作</Content>
+	</InfoCard>
+	<InfoCard>
+		<Header>Sort2 分拣实训2</Header>
+		<Content>请按照要求进行操作</Content>
+	</InfoCard>
+</InfoCards>

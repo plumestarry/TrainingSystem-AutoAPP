@@ -121,15 +121,25 @@ namespace AutoAPI.Service
             }
         }
 
-        public async Task<ApiResponse> Summary()
+        public async Task<ApiResponse> Summary(string userName)
         {
             try
             {
-                // 实训记录结果
-                var result = await work.GetRepository<RecordEntity>().GetAllAsync(
+                IList<RecordEntity> result;
+                if (userName == "Admin")
+                {
+                    result = await work.GetRepository<RecordEntity>().GetAllAsync(
+                        orderBy: source => source.OrderByDescending(t => t.CreateDate)
+                        );
+                }
+                else
+                {
+                    result = await work.GetRepository<RecordEntity>().GetAllAsync(
+                    predicate: x => x.UserName == userName,
                     orderBy: source => source.OrderByDescending(t => t.CreateDate)
                     );
-
+                }
+                
                 SummaryDto summary = new SummaryDto
                 {
                     Sum = result.Count, // 汇总实训次数
