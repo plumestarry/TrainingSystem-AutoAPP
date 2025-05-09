@@ -170,6 +170,7 @@ namespace ChartModule.Methods
                 }
                 else
                 {
+                    numOfTraining --;
                     aggregator.SendMessage($"第{numOfTraining}轮实训失败，请停止实训");
                     await UploadGrade(aggregator, service, title, numOfTraining.ToString());
                     return;
@@ -335,6 +336,7 @@ namespace ChartModule.Methods
                 }
                 else
                 {
+                    numOfTraining --;
                     aggregator.SendMessage($"第{numOfTraining}轮实训失败，请停止实训");
                     await UploadGrade(aggregator, service, title, numOfTraining.ToString());
                     return;

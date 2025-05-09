@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoAPI.Migrations
 {
     [DbContext(typeof(AutoContext))]
-    [Migration("20250419134324_AutoAPI")]
-    partial class AutoAPI
+    [Migration("20250508132014_AutoAPP")]
+    partial class AutoAPP
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,15 +29,15 @@ namespace AutoAPI.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("IODefinitions")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("IPAddress")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Port")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SlaveID")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

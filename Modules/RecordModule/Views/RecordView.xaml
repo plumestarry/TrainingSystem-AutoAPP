@@ -67,7 +67,7 @@
                         VerticalAlignment="Center"
                         FontSize="20"
                         Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                        Text="已通过记录" />
+                        Text="未通过记录" />
 
                     <DataGrid
                         Grid.Row="1"
@@ -141,7 +141,7 @@
                         VerticalAlignment="Center"
                         FontSize="20"
                         Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                        Text="未通过记录" />
+                        Text="已通过记录" />
 
                     <DataGrid
                         Grid.Row="1"

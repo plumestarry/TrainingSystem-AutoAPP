@@ -124,6 +124,7 @@ namespace RecordModule.ViewModels
                     {
                         CommunicationEntities.Add(item);
                     }
+                    CommunicationEntities.Remove("Admin");
                 }
             }
             catch (Exception)
@@ -156,6 +157,8 @@ namespace RecordModule.ViewModels
             {
                 NotPassItems = NotPassItemsAll;
                 PassItems = PassItemsAll;
+                ReIndexItems(NotPassItems);
+                ReIndexItems(PassItems);
             }
             else if (AppSession.UserName == "Admin")
             {

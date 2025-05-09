@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AutoAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AutoAPI : Migration
+    public partial class AutoAPP : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +17,9 @@ namespace AutoAPI.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
                     IPAddress = table.Column<string>(type: "TEXT", nullable: false),
-                    IODefinitions = table.Column<string>(type: "TEXT", nullable: false),
+                    Port = table.Column<string>(type: "TEXT", nullable: false),
+                    SlaveID = table.Column<string>(type: "TEXT", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)

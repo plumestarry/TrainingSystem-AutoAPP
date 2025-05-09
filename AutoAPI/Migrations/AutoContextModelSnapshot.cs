@@ -26,15 +26,15 @@ namespace AutoAPI.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("IODefinitions")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("IPAddress")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Port")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SlaveID")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

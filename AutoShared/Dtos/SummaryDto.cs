@@ -14,7 +14,7 @@ namespace AutoShared.Dtos
     {
         private int sum;
         private int completedCount;
-        private string completedRatio;
+        private string completedRatio = "0%";
 
 
         /// <summary>
@@ -44,12 +44,12 @@ namespace AutoShared.Dtos
             set { completedRatio = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<RecordDto> recordList;
+        private ObservableCollection<RecordDto>? recordList;
 
         /// <summary>
         /// 实训记录列表
         /// </summary>
-        public ObservableCollection<RecordDto> RecordList
+        public ObservableCollection<RecordDto>? RecordList
         {
             get { return recordList; }
             set { recordList = value; OnPropertyChanged(); }
