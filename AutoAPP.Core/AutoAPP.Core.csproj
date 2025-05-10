@@ -16,12 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\e_sqlite3.dll" />
-    <None Remove="Resources\libHarfBuzzSharp.dll" />
-    <None Remove="Resources\libSkiaSharp.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="hyjiacan.pinyin4net" Version="4.1.1" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc5.4" />
@@ -41,12 +35,6 @@
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Views\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\e_sqlite3.dll" />
-    <EmbeddedResource Include="Resources\libHarfBuzzSharp.dll" />
-    <EmbeddedResource Include="Resources\libSkiaSharp.dll" />
   </ItemGroup>
 
 </Project>
