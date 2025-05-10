@@ -9,13 +9,13 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView;
 using SkiaSharp;
 using System.Windows.Threading;
-using AutoAPP.Models;
 using System.Xml.Linq;
 using Path = System.IO.Path;
 using System.Reflection.Metadata;
 using System.Windows.Resources;
+using IndexModule.Models;
 
-namespace AutoAPP.ViewModels
+namespace IndexModule.ViewModels
 {
     public partial class IndexViewModel : NavigationViewModel
     {

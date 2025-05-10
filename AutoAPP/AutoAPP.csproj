@@ -29,6 +29,7 @@
     <ProjectReference Include="..\AutoAPP.Core\AutoAPP.Core.csproj" />
     <ProjectReference Include="..\Modules\AboutModule\AboutModule.csproj" />
     <ProjectReference Include="..\Modules\ChartModule\ChartModule.csproj" />
+    <ProjectReference Include="..\Modules\IndexModule\IndexModule.csproj" />
     <ProjectReference Include="..\Modules\LoginModule\LoginModule.csproj" />
     <ProjectReference Include="..\Modules\ModbusModule\ModbusModule.csproj" />
     <ProjectReference Include="..\Modules\RecordModule\RecordModule.csproj" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoAPP.Models
+namespace IndexModule.Models
 {
     public partial class InfoCard : ObservableObject
     {

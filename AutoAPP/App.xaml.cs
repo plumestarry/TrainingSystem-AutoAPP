@@ -19,6 +19,7 @@ using ChartModule;
 using ModbusModule.ViewModels;
 using ModbusModule.Views;
 using RecordModule;
+using IndexModule;
 
 namespace AutoAPP;
 
@@ -34,7 +35,6 @@ public partial class App : PrismApplication
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>();
     }
 
     protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
@@ -45,6 +45,7 @@ public partial class App : PrismApplication
         moduleCatalog.AddModule<ModbusModuleConfigure>();
         moduleCatalog.AddModule<ChartModuleConfigure>();
         moduleCatalog.AddModule<RecordModuleConfigure>();
+        moduleCatalog.AddModule<IndexModuleConfigure>();
     }
 
     protected override void ConfigureRegionAdapterMappings(RegionAdapterMappings regionAdapterMappings)
