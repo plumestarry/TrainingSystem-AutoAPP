@@ -114,7 +114,7 @@
                             <DataGridTextColumn
                                 Width="*"
                                 Binding="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Header="连接口"
+                                Header="连接地址"
                                 IsReadOnly="False"
                                 SortMemberPath="Port" />
                         </DataGrid.Columns>
@@ -208,7 +208,7 @@
                             <DataGridTextColumn
                                 Width="*"
                                 Binding="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Header="连接口"
+                                Header="连接地址"
                                 IsReadOnly="False"
                                 SortMemberPath="Port" />
                         </DataGrid.Columns>

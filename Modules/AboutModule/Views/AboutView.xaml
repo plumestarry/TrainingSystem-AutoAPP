@@ -6,12 +6,15 @@
     xmlns:local="clr-namespace:AboutModule.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:viewmodels="clr-namespace:AboutModule.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:AboutViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid Margin="32">
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -24,26 +27,34 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-            Text="关于分拣实训系统" />
+            Text="关于分拣装置实训平台" />
 
         <TextBlock
             Grid.Row="1"
             MaxWidth="480"
             Margin="16"
             Style="{StaticResource MaterialDesignBody1TextBlock}"
-            Text="本项目用于毕业设计"
+            Text="版本 1.0 - 发布于 2025年 5月10日"
             TextAlignment="Center"
             TextWrapping="Wrap" />
 
-        <StackPanel
+        <TextBlock
             Grid.Row="2"
+            MaxWidth="480"
+            Margin="16"
+            Style="{StaticResource MaterialDesignBody1TextBlock}"
+            Text="{Binding DevelopInfo}"
+            TextWrapping="Wrap" />
+
+        <StackPanel
+            Grid.Row="3"
             Margin="16"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
             <TextBlock
                 VerticalAlignment="Center"
                 Style="{StaticResource MaterialDesignBody1TextBlock}"
-                Text="项目地址：" />
+                Text="项目源码地址：" />
 
             <Border
                 Margin="8,0,0,0"
@@ -59,7 +70,7 @@
                     Style="{StaticResource HoverableTextBlockStyle}">
                     <TextBlock.Inlines>
                         <Hyperlink NavigateUri="https://github.com/plumestarry/TrainingSystem-AutoAPP" RequestNavigate="Hyperlink_RequestNavigate">
-                            <Run Text="https://github.com/plumestarry/TrainingSystem-AutoAPP" />
+                            <Run Text="https://github.com/AutoAPP/TrainingSystem-AutoAPP" />
                         </Hyperlink>
                     </TextBlock.Inlines>
                 </TextBlock>
@@ -68,13 +79,13 @@
         </StackPanel>
 
         <TextBlock
-            Grid.Row="3"
+            Grid.Row="4"
             Margin="16"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Foreground="{DynamicResource PrimaryHueMidBrush}"
             Style="{StaticResource MaterialDesignBody1TextBlock}"
-            Text="By：Plumestarry" />
+            Text="开发人员：PJL" />
     </Grid>
 
 </UserControl>

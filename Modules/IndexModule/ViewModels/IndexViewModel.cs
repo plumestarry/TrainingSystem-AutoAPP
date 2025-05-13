@@ -23,7 +23,7 @@ namespace IndexModule.ViewModels
 
         public IndexViewModel(IContainerProvider containerProvider) : base(containerProvider)
         {
-            Title = $"你好，{AppSession.UserName}  欢迎使用 AutoAPP 实训平台";
+            Title = $"你好，{AppSession.UserName}  欢迎使用分拣装置实训平台";
             InfoCards = new ObservableCollection<InfoCard>();
 
             // 初始化并启动定时器

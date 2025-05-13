@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AboutModule.ViewModels;
 
 namespace AboutModule
 {
@@ -22,7 +23,7 @@ namespace AboutModule
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<AboutView>();
+            containerRegistry.RegisterForNavigation<AboutView, AboutViewModel>();
 
         }
     }

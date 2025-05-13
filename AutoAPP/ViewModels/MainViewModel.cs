@@ -80,10 +80,10 @@ namespace AutoAPP.ViewModels
 
         void CreateMenuBar()
         {
-            MenuBars?.Add(new MenuBar() { Icon = "InformationOutline", Title = "关于本平台", NameSpace = "AboutView" });
-            MenuBars?.Add(new MenuBar() { Icon = "TextBoxSearchOutline", Title = "实训记录查看", NameSpace = "RecordView" });
-            MenuBars?.Add(new MenuBar() { Icon = "ChartBar", Title = "实训统计与测试", NameSpace = "ChartView" });
-            MenuBars?.Add(new MenuBar() { Icon = "AccessPointNetwork", Title = "Modbus 配置", NameSpace = "ModbusView" });
+            MenuBars?.Add(new MenuBar() { Icon = "InformationOutline", Title = "关于页面", NameSpace = "AboutView" });
+            MenuBars?.Add(new MenuBar() { Icon = "TextBoxSearchOutline", Title = "实训记录页面", NameSpace = "RecordView" });
+            MenuBars?.Add(new MenuBar() { Icon = "ChartBar", Title = "实训统计与测试页面", NameSpace = "ChartView" });
+            MenuBars?.Add(new MenuBar() { Icon = "AccessPointNetwork", Title = "Modbus 通信配置页面", NameSpace = "ModbusView" });
             
         }
 
