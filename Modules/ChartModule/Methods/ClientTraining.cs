@@ -120,6 +120,7 @@ namespace ChartModule.Methods
                     ushort data = dataValues[random.Next(dataValues.Length)];
 
                     // 发送 Part 寄存器数据
+                    await Task.Delay(50);
                     await Requester.WriteSingleRegisterAsync(ModbusConfig.SlaveID, TrainingPort["Part"], data);
 
                     // 根据发送的数据更新 ClientItems
@@ -148,6 +149,7 @@ namespace ChartModule.Methods
 
                     // 发送 Emit 线圈信号，启动分拣过程
                     // 此操作应在发送数据后进行，无论数据代表何种颜色
+                    await Task.Delay(50);
                     await Requester.WriteSingleCoilAsync(ModbusConfig.SlaveID, TrainingPort["Emit"], true);
 
                     // 等待指定的延迟时间
@@ -170,8 +172,8 @@ namespace ChartModule.Methods
                 }
                 else
                 {
-                    numOfTraining --;
                     aggregator.SendMessage($"第{numOfTraining}轮实训失败，请停止实训");
+                    numOfTraining--;
                     await UploadGrade(aggregator, service, title, numOfTraining.ToString());
                     return;
                 }
@@ -264,6 +266,7 @@ namespace ChartModule.Methods
                     ushort data = dataValues[random.Next(dataValues.Length)];
 
                     // 发送 Part 寄存器数据
+                    await Task.Delay(50);
                     await Requester.WriteSingleRegisterAsync(ModbusConfig.SlaveID, TrainingPort["Part"], data);
 
                     // 根据发送的数据更新 ClientItems
@@ -310,6 +313,7 @@ namespace ChartModule.Methods
 
                     // 发送 Emit 线圈信号，启动分拣过程
                     // 此操作应在发送数据后进行，无论数据代表何种颜色
+                    await Task.Delay(50);
                     await Requester.WriteSingleCoilAsync(ModbusConfig.SlaveID, TrainingPort["Emit"], true);
 
                     // 等待指定的延迟时间
@@ -336,8 +340,8 @@ namespace ChartModule.Methods
                 }
                 else
                 {
-                    numOfTraining --;
                     aggregator.SendMessage($"第{numOfTraining}轮实训失败，请停止实训");
+                    numOfTraining--;
                     await UploadGrade(aggregator, service, title, numOfTraining.ToString());
                     return;
                 }
